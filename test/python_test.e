@@ -246,7 +246,7 @@ feature -- Initialization
 			--
 		local
 			s: STRING
-			c: DS_HASH_TABLE_CURSOR [PYTHON_OBJECT, STRING]
+			c: HASH_TABLE_ITERATION_CURSOR [PYTHON_OBJECT, STRING]
 		do
 			if attached {PYTHON_MODULE} py.main_module as m then
 				print ("-------------------------------%N")

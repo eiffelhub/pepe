@@ -67,19 +67,19 @@ feature -- Access
 		end
 
 
-	list: DS_LIST [PYTHON_OBJECT]
+	list: LIST [PYTHON_OBJECT]
 			-- Eiffel List form
 		local
 			i: INTEGER
 		do
-			create {DS_ARRAYED_LIST [PYTHON_OBJECT]} Result.make (size)
+			create {ARRAYED_LIST [PYTHON_OBJECT]} Result.make (size)
 			from
 				i := 0
 			until
 				i >= size
 			loop
 				if attached item_at (i) as l_item_at then
-					Result.put_last (l_item_at)
+					Result.force (l_item_at)
 				end
 				i := i + 1
 			end
@@ -87,7 +87,7 @@ feature -- Access
 
 feature -- Conversion
 
-	to_eiffel_type: DS_LIST [ANY]
+	to_eiffel_type: LIST [ANY]
 			-- Creates and returns a list of eiffel typed objects
 			-- from this python list. Each contained PYTHON_OBJECT
 			-- item in the list is converted using the to_eiffel_type
@@ -95,30 +95,28 @@ feature -- Conversion
 		local
 			i: INTEGER
 		do
-			create {DS_ARRAYED_LIST [ANY]} Result.make (size)
+			create {ARRAYED_LIST [ANY]} Result.make (size)
 			from
 				i := 0
 			until
 				i >= size
 			loop
 				if attached item_at (i) as l_item_at then
-					Result.put_last (l_item_at.to_eiffel_type)
+					Result.force (l_item_at.to_eiffel_type)
 				end
 				i := i + 1
 			end
 		end
 
-	to_str_list: DS_LIST [UC_STRING]
+	to_str_list: LIST [STRING_32]
 			-- Converts this list to a DS_LIST and converts each PYTHON_OBJECT
 			-- to a UC_STRING, PYTHON_STRINGs are converted using string,
 			-- all other ojects are converted with str (to avoid a string
 			-- test to be converted into "'test'".
 		local
 			i: INTEGER
-			utils: UC_UNICODE_FACTORY
 		do
-			create utils
-			create {DS_ARRAYED_LIST [UC_STRING]} Result.make (size)
+			create {ARRAYED_LIST [STRING_32]} Result.make (size)
 			from
 				i := 0
 			until
@@ -128,9 +126,9 @@ feature -- Conversion
 					if o.is_string and then
 						attached {PYTHON_STRING} o as l_s
 					then
-						Result.put_last (utils.new_unicode_string (l_s.string))
+						Result.force (create {STRING_32}.make_from_string_general (l_s.string))
 					else
-						Result.put_last (utils.new_unicode_string (o.str))
+						Result.force (create {STRING_32}.make_from_string_general (o.str))
 					end
 				end
 				i := i + 1
@@ -157,27 +155,26 @@ feature -- Status setting
 feature -- Element change
 
 	sort
-				-- Sort the items of Current'
-			local
-				st: INTEGER
-			do
-				st  := c_py_list_sort (py_obj_ptr)
-				if st = -1 then
-					raise (Py_index_error)
-				end
+			-- Sort the items of Current'
+		local
+			st: INTEGER
+		do
+			st  := c_py_list_sort (py_obj_ptr)
+			if st = -1 then
+				raise (Py_index_error)
 			end
+		end
 
-		append (o: PYTHON_OBJECT)
-					-- Append the object o at the end of the list.
-				local
-					st: INTEGER
-				do
-					st := c_py_list_append (py_obj_ptr, o.py_obj_ptr)
-					if st = -1 then
-						raise (Py_index_error)
-					end
-				end
-
+	append (o: PYTHON_OBJECT)
+			-- Append the object o at the end of the list.
+		local
+			st: INTEGER
+		do
+			st := c_py_list_append (py_obj_ptr, o.py_obj_ptr)
+			if st = -1 then
+				raise (Py_index_error)
+			end
+		end
 
 feature -- Measurement
 

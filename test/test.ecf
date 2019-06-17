@@ -15,7 +15,6 @@
 		<setting name="dead_code_removal" value="feature"/>
 		<library name="base" location="$ISE_LIBRARY\library\base\base.ecf"/>
 		<library name="pepe" location="..\library\pepe.ecf"/>
-		<library name="structure" location="$ISE_LIBRARY\contrib\library\gobo\library\structure\src\library.ecf"/>
 		<cluster name="test" location=".\" recursive="true"/>
 	</target>
 </system>

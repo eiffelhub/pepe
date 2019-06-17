@@ -12,11 +12,11 @@ inherit
 		redefine
 			py_type_ptr
 		end
-	
+
 create
 	borrowed,
 	new
-	
+
 feature -- Access
 
 	py_type_ptr: POINTER
@@ -24,7 +24,7 @@ feature -- Access
 		do
 			Result := c_py_class_type
 		end
-		
+
 feature -- Status report
 
 	is_a_class_object: BOOLEAN
@@ -32,15 +32,16 @@ feature -- Status report
 		do
 			Result := c_py_class_check (py_obj_ptr) = 1
 		end
-		
+
 feature -- Basic routines
 
 	call
-			-- Call `Current' 
+			-- Call `Current'
 		do
-			
+
 		end
-		
+
 invariant
 	right_type: is_a_class_object
+	
 end -- class PYTHON_CLASS

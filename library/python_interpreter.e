@@ -82,7 +82,7 @@ feature -- Access
 			Result := module (main_module_name)
 		end
 
-	main_symbols: detachable DS_HASH_TABLE [PYTHON_OBJECT, STRING]
+	main_symbols: detachable HASH_TABLE [PYTHON_OBJECT, STRING]
 			-- Defined symbols in "__main__"
 		require
 			initialized: is_initialized
@@ -200,11 +200,11 @@ feature -- Basic routines
 			file_exists: file_exists (s)
 			initialized: is_initialized
 		local
-			f: KL_TEXT_INPUT_FILE
+			f: PLAIN_TEXT_FILE
 			c: INTEGER
 			buff: STRING
 		do
-			create f.make (s)
+			create f.make_with_name (s)
 			c := f.count
 			create buff.make (c + 1)
 			buff.fill_blank
@@ -336,9 +336,9 @@ feature -- Implementation (public)
 	file_exists (s: STRING): BOOLEAN
 			--
 		local
-			f: KL_BINARY_INPUT_FILE
+			f: RAW_FILE
 		do
-			create f.make (s)
+			create f.make_with_name (s)
 			Result := f.exists
 		end
 

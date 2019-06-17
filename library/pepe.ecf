@@ -34,8 +34,6 @@
 			</condition>
 		</external_object>
 		<library name="base" location="$ISE_LIBRARY\library\base\base.ecf"/>
-		<library name="kernel" location="$ISE_LIBRARY\contrib\library\gobo\library\kernel\src\library.ecf"/>
-		<library name="structure" location="$ISE_LIBRARY\contrib\library\gobo\library\structure\src\library.ecf"/>
 		<cluster name="pepe" location=".\" recursive="true"/>
 	</target>
 </system>

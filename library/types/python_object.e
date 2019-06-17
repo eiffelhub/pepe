@@ -251,7 +251,6 @@ feature {NONE} -- Implementation
 			end
 		end
 
-
 invariant
 	handle_set: py_obj_ptr /= default_pointer
 	right_type: py_type_ptr = c_py_object_type (py_obj_ptr)

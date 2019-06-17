@@ -52,13 +52,10 @@ feature -- Access
 
 feature -- Conversion
 
-	to_eiffel_type: UC_STRING
+	to_eiffel_type: STRING_32
 			--
-		local
-			utils: UC_UNICODE_FACTORY
 		do
-			create utils
-			Result := utils.new_unicode_string (string)
+			create Result.make_from_string_general (string)
 		end
 
 feature -- Status report

@@ -83,7 +83,7 @@ feature -- Access
 
 		end
 
-	hash_table: DS_HASH_TABLE [PYTHON_OBJECT, STRING]
+	hash_table: HASH_TABLE [PYTHON_OBJECT, STRING]
 			-- Representation of `Current' PYTHON_DICTIONARY as a HASH_TABLE
 		local
 			i: INTEGER
@@ -115,7 +115,7 @@ feature -- Access
 
 feature -- Conversion
 
-	to_eiffel_type: DS_HASH_TABLE [ANY, UC_STRING]
+	to_eiffel_type: HASH_TABLE [ANY, STRING_32]
 			-- Creates and returns a hash table of eiffel typed objects
 			-- from this python dict. Each contained PYTHON_OBJECT
 			-- item in this dict is converted using the to_eiffel_type		
@@ -123,10 +123,8 @@ feature -- Conversion
 			i: INTEGER
 			ks: PYTHON_LIST
 			s: STRING
-			utils: UC_UNICODE_FACTORY
 		do
 			ks := keys
-			create utils
 			create Result.make (size + 1)
 			from
 				i := 0
@@ -142,7 +140,7 @@ feature -- Conversion
 						s := o.str.string
 					end
 					if attached item_at (o) as l_item_at then
-						Result.force (l_item_at.to_eiffel_type, utils.new_unicode_string (s))
+						Result.force (l_item_at.to_eiffel_type, create {STRING_32}.make_from_string_general (s))
 					end
 				end
 				i := i + 1
