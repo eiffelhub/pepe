@@ -52,7 +52,7 @@ feature -- Initialization
 			init (py)
 		end
 
-	init (py:POINTER)
+	init (py: POINTER)
 			-- Initialize `Current' as the Python object with handle `py'.
 		require
 			right_type: py_obj_ptr /= default_pointer implies py_type_ptr = type_ptr_of_object_ptr (py)
@@ -170,7 +170,7 @@ feature -- Status report
 		local
 			r: INTEGER
 		do
-			r := c_py_object_compare (py_obj_ptr,other.py_obj_ptr, 0) --define Py_LT 0
+			r := c_py_object_compare_cmp (py_obj_ptr,other.py_obj_ptr) 
 			Result := r < 0
 		end
 

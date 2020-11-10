@@ -1758,6 +1758,19 @@ feature {NONE} -- Externals (Object Protocol)
 			"PyObject_DelAttr"
 		end
 
+
+	c_py_object_compare_cmp (o1, o2: POINTER): INTEGER
+			-- Compare the values of `o1' and `o2' using a routine provided by `o1',
+			-- if one exists, otherwise with a routine provided by `o2'.
+			-- Returns the result of the comparison on success.
+			-- On error, the value returned is undefined; use PyErr_Occurred() to detect an error.
+			-- This is equivalent to the Python expression "cmp(o1, o2)".
+		external
+			"C inline use <Python.h>"
+		alias
+			"(($o1 > $o2) - ($o1 < $o2)) "
+		end
+
 	c_py_object_cmp, c_py_object_rich_compare (o1, o2: POINTER; opid: INTEGER): POINTER
 			--Compare the values of `o1` and `o2` using the operation specified by opid.
 			-- which must be one of Py_LT, Py_LE, Py_EQ, Py_NE, Py_GT, or Py_GE, corresponding to <, <=, ==, !=, >, or >= respectively.

@@ -1,3 +1,5 @@
-from time import time,ctime
-a = 2
-print 'Today is',ctime(time()), ' and "a" is ', a
+import calendar
+
+cal = calendar.month(2016, 2)
+print ("Here is the calendar:")
+print (cal)

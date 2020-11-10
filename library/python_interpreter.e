@@ -48,6 +48,22 @@ feature -- Initialization
 			retry
 		end
 
+	finalize_ex
+			-- Finalize the Python interpretator
+		require
+			initialized: is_initialized
+		local
+			retried: BOOLEAN
+		do
+			if not retried then
+				c_py_finalize_ex
+			end
+			namespace := Void
+		rescue
+			retried := True
+			retry
+		end
+
 feature -- Access
 
 	namespace: detachable PYTHON_DICTIONARY

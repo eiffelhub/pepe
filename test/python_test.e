@@ -62,7 +62,7 @@ feature -- Initialization
 			r: INTEGER
 		do
 			create py.initialize
-			s := "from time import time,ctime%Na = 2%Nprint 'Today is',ctime(time()), ' and %"a%" is ', a%N"
+			s := "import time%Na = 2%Nprint (%"Today is%", time.ctime(), %"and 'a' is %", a)"
 			print ("--------------- run string -------------------------%N")
 			print (s)
 			print ("----------------------------------------------------%N")
@@ -76,8 +76,8 @@ feature -- Initialization
 			end
 				--print_modules (py)
 			if attached py.evaluate_expression (data_dictionary) as o then
-				py.attach_symbol ("XYZ", o)
-				print_main_symbols (py)
+--				py.attach_symbol ("XYZ", o)
+--				print_main_symbols (py)
 				py.finalize
 			else
 				if attached py.last_exception as exec then
@@ -102,8 +102,8 @@ feature -- Initialization
 			print ("----------------------------------------------------%N")
 			create py.initialize
 			r := py.run_program_file (s)
-			if attached py.value ("a") as l_value then
-				print ("a finns med värdet " + l_value.str)
+			if attached py.value ("cal") as l_value then
+				print ("cal exists with val: " + l_value.str)
 			end
 			py.finalize
 		end
