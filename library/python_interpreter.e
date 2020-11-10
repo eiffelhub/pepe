@@ -325,7 +325,7 @@ feature {NONE} -- Implementation
 			initialized: is_initialized
 		do
 			f.open_read
-			Result := c_py_run_simple_file (f.file_pointer, s2p (f.path.name.as_string_8))
+			Result := c_py_run_simple_file (f.file_pointer, s2p (f.path.name.to_string_8))
 			f.close
 		ensure
 			closed: f.is_closed

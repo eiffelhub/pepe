@@ -459,11 +459,31 @@ feature {NONE} -- Externals
 		end
 
 	c_py_finalize
-			-- Initialize the interpreter.
+			-- Undo all initializations made by c_py_initialize
+			-- see c_py_finalize_ex
 		external
 			"C | %"Python.h%""
 		alias
 			"Py_Finalize"
+		end
+
+	c_py_finalize_ex
+		-- Undo all initializations made by Py_Initialize() and subsequent use of Python/C API functions, and destroy all sub-interpreters
+		-- (see Py_NewInterpreter() below) that were created and not yet destroyed since the last call to Py_Initialize().
+		-- Ideally, this frees all memory allocated by the Python interpreter. This is a no-op when called for a second time (without calling Py_Initialize() again first).
+		-- Normally the return value is 0. If there were errors during finalization (flushing buffered data), -1 is returned.
+		-- This function is provided for a number of reasons. An embedding application might want to restart Python without having to restart the application itself.
+		-- An application that has loaded the Python interpreter from a dynamically loadable library (or DLL) might want to free all memory allocated by Python before unloading the DLL.
+		-- During a hunt for memory leaks in an application a developer might want to free all memory allocated by Python before exiting from the application.
+		-- Bugs and caveats: The destruction of modules and objects in modules is done in random order; this may cause destructors (__del__() methods) to fail when they depend on other objects (even functions) or modules.
+		-- Dynamically loaded extension modules loaded by Python are not unloaded. Small amounts of memory allocated by the Python interpreter may not be freed (if you find a leak, please report it).
+		-- Memory tied up in circular references between objects is not freed. Some memory allocated by extension modules may not be freed.
+		-- Some extensions may not work properly if their initialization routine is called more than once; this can happen if an application calls Py_Initialize() and Py_FinalizeEx() more than once.
+		--  Raises an auditing event cpython._PySys_ClearAuditHooks with no arguments.	
+		external
+			"C | %"Python.h%""
+		alias
+			"Py_FinalizeEx"
 		end
 
 	c_py_run_simple_string (p: POINTER): INTEGER

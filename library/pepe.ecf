@@ -33,9 +33,10 @@
 		</external_object>
 		<external_object location="-l$(PYTHON_LIB_NAME)">
 			<condition>
-				<platform value="unix"/>
+				<platform excluded_value="windows"/>
 			</condition>
 		</external_object>
+		<external_cflag value="-DPY_SSIZE_T_CLEAN"/>
 		<library name="base" location="$ISE_LIBRARY\library\base\base.ecf"/>
 		<cluster name="pepe" location=".\" recursive="true">
 			<file_rule>
