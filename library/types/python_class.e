@@ -22,7 +22,7 @@ feature -- Access
 	py_type_ptr: POINTER
 			--
 		do
-			Result := c_py_class_type
+			Result := c_py_type_type
 		end
 
 feature -- Status report
@@ -30,7 +30,7 @@ feature -- Status report
 	is_a_class_object: BOOLEAN
 			-- Is `Current' a Python class object?
 		do
-			Result := c_py_class_check (py_obj_ptr) = 1
+			Result := c_py_type_check (py_obj_ptr) = 1
 		end
 
 feature -- Basic routines
@@ -43,5 +43,5 @@ feature -- Basic routines
 
 invariant
 	right_type: is_a_class_object
-	
+
 end -- class PYTHON_CLASS

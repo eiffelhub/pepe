@@ -28,13 +28,14 @@ feature -- Access
 
 feature -- Status report
 
-	
+
 feature -- Measurement
 
 	size: INTEGER
 			-- Element count
 		do
-			Result := c_py_string_size (py_obj_ptr)
+			--Result := c_py_string_size (py_obj_ptr)
+			Result := {PY_UNICODE_OBJECT}.py_unicode_strlen (py_obj_ptr).as_integer_32
 		end
 
 end -- class PYTHON_STRING

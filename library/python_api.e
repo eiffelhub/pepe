@@ -1,6 +1,6 @@
-note
+﻿note
 	description: "Pyton API externals, common routines and constants"
-	author: "Daniel Rodr�guez"
+	author: "Daniel Rodríguez"
 	file: "$Workfile: $"
 	date: "$Date$"
 	revision: "$Revision$"
@@ -19,6 +19,8 @@ feature -- Access (Constants)
 	doc_attribute_name: STRING = "__doc__"
 
 feature -- Access (Error)
+
+	Py_generator_exit: STRING = "PyExc_generator_exit"
 
 	Py_arithmetic_error: STRING = "Py_arithmetic_error"
 
@@ -59,6 +61,8 @@ feature -- Access (Error)
 	Py_overflow_error: STRING = "Py_overflow_error"
 
 	Py_reference_error: STRING = "Py_reference_error"
+
+	Py_stop_async_iteration: STRING = "Py_stop_async_iteration"
 
 	Py_runtime_error: STRING = "Py_runtime_error"
 
@@ -106,6 +110,41 @@ feature -- Access (Error)
 
 	Py_future_warning: STRING = "Py_future_warning"
 
+	Py_buffer_error: STRING = "Py_buffer_error"
+
+	Py_module_not_found_error: STRING = "Py_module_not_found_error"
+
+	Py_blocking_io_error: STRING = "Py_blocking_io_error"
+
+	Py_child_process_error: STRING = "Py_child_process_error"
+
+	Py_broken_pipe_error: STRING = "Py_broken_pipe_error"
+
+	Py_connection_aborted_error: STRING = "Py_connection_aborted_error"
+
+	Py_connection_refused_error: STRING = "Py_connection_refused_error"
+
+	Py_connection_reset_error: STRING = "Py_connection_reset_error"
+
+	Py_connection_error: STRING = "Py_connection_error"
+
+	Py_file_exists_error: STRING = "Py_file_exists_error"
+
+	Py_file_not_found_error: STRING = "Py_file_not_found_error"
+
+	Py_interrupted_error: STRING = "Py_interrupted_error"
+
+	Py_is_a_directory_error: STRING = "Py_is_a_directory_error"
+
+	Py_not_a_directory_error: STRING = "Py_not_a_directory_error"
+
+	Py_permission_error: STRING = "Py_permission_error"
+
+	Py_process_lookup_error: STRING = "Py_process_lookup_error"
+
+	Py_timeout_error: STRING = "Py_timeout_error"
+
+
 	ocurred_python_exception: STRING
 			-- String exception corresponding the python exception set.
 		require
@@ -113,110 +152,90 @@ feature -- Access (Error)
 		do
 			if c_py_err_exception_matches (c_py_exc_system_exit) = 1 then
 				Result := Py_system_exit
+			elseif c_py_err_exception_matches (c_py_exc_keyboard_interrupt) = 1 then
+				Result := Py_keyboard_interrupt
+			elseif c_py_err_exception_matches (c_py_exc_generator_exit) = 1 then
+				Result := Py_generator_exit
 			elseif c_py_err_exception_matches (c_py_exc_stop_iteration) = 1 then
-				Result := Py_stop_iteration
-			elseif c_py_err_exception_matches (c_py_exc_standard_error) = 1 then
-				if c_py_err_exception_matches (c_py_exc_keyboard_interrupt) = 1 then
-					Result := Py_keyboard_interrupt
-				elseif c_py_err_exception_matches (c_py_exc_import_error) = 1 then
+				Result := py_stop_iteration
+			elseif c_py_err_exception_matches (c_py_exc_stop_async_iteration) = 1 then
+				Result := py_stop_iteration
+			elseif c_py_err_exception_matches (c_py_exc_arithmetic_error) = 1 then
+				if c_py_err_exception_matches (c_py_exc_overflow_error) = 1 then
+					Result := Py_overflow_error
+				elseif c_py_err_exception_matches (c_py_exc_floating_point_error) = 1 then
+					Result := Py_floating_point_error
+				elseif c_py_err_exception_matches (c_py_exc_zero_division_error) = 1 then
+					Result := Py_zero_division_error
+				else
+					Result := Py_arithmetic_error
+				end
+			elseif c_py_err_exception_matches (c_py_exc_assertion_error) = 1 then
+				Result := py_assertion_error
+			elseif c_py_err_exception_matches (c_py_exc_attribute_error) = 1 then
+				Result := py_attribute_error
+			elseif c_py_err_exception_matches (c_py_exc_buffer_error) = 1 then
+				Result := py_buffer_error
+			elseif c_py_err_exception_matches (c_py_exc_eof_error) = 1 then
+				Result := py_eof_error
+			elseif c_py_err_exception_matches (c_py_exc_import_error) = 1 then
+				if c_py_err_exception_matches (c_py_exc_module_not_found_error) = 1 then
+					Result := Py_module_not_found_error
+				else
 					Result := Py_import_error
-				elseif c_py_err_exception_matches (c_py_exc_environment_error) = 1 then
-					if c_py_err_exception_matches (c_py_exc_io_error) = 1 then
-						Result := Py_io_error
-					elseif c_py_err_exception_matches (c_py_exc_os_error) = 1 then
+				end
+			elseif c_py_err_exception_matches (c_py_exc_lookup_error) = 1 then
+				if c_py_err_exception_matches (c_py_exc_index_error) = 1 then
+					Result := Py_index_error
+				elseif c_py_err_exception_matches (c_py_exc_key_error) = 1 then
+					Result := Py_key_error
+				else
+					Result := Py_lookup_error
+				end
+			elseif c_py_err_exception_matches (c_py_exc_memory_error) = 1 then
+				Result := Py_memory_error
+			elseif c_py_err_exception_matches (c_py_exc_name_error) = 1 then
+				if c_py_err_exception_matches (c_py_exc_unbound_local_error) = 1 then
+					Result := Py_unbound_local_error
+				else
+					Result := Py_name_error
+				end
+			elseif c_py_err_exception_matches (c_py_exc_os_error) = 1 then
+					if c_py_err_exception_matches (c_py_exc_blocking_io_error) = 1 then
+						Result := Py_blocking_io_error
+					elseif c_py_err_exception_matches (c_py_exc_child_process_error) = 1  then
+						Result := Py_child_process_error
+					elseif c_py_err_exception_matches (c_py_exc_connection_error) = 1 then
+						if c_py_err_exception_matches (c_py_exc_broken_pipe_error) = 1 then
+							Result := Py_broken_pipe_error
+						elseif c_py_err_exception_matches (c_py_exc_connection_aborted_error) = 1 then
+							Result := Py_connection_aborted_error
+						elseif c_py_err_exception_matches (c_py_exc_connection_refused_error) = 1 then
+							Result := Py_connection_refused_error
+						elseif c_py_err_exception_matches (c_py_exc_connection_reset_error) = 1 then
+							Result := Py_connection_reset_error
+						else
+							Result := Py_connection_error
+						end
+					elseif c_py_err_exception_matches (c_py_exc_file_exists_error) = 1  then
+						Result := Py_file_exists_error
+					elseif c_py_err_exception_matches (c_py_exc_file_not_found_error) = 1  then
+						Result := Py_file_not_found_error
+					elseif c_py_err_exception_matches (c_py_exc_interrupted_error) = 1  then
+						Result := Py_interrupted_error
+					elseif c_py_err_exception_matches (c_py_exc_is_a_directory_error) = 1  then
+						Result := Py_is_a_directory_error
+					elseif c_py_err_exception_matches (c_py_exc_not_a_directory_error) = 1  then
+						Result := Py_not_a_directory_error
+					elseif c_py_err_exception_matches (c_py_exc_permission_error) = 1  then
+						Result := Py_permission_error
+					elseif c_py_err_exception_matches (c_py_exc_process_lookup_error) = 1  then
+						Result := Py_process_lookup_error
+					elseif c_py_err_exception_matches (c_py_exc_timeout_error) = 1  then
+						Result := Py_timeout_error
+					else
 						Result := Py_os_error
-					else
-						Result := Py_environment_error
 					end
-				elseif c_py_err_exception_matches (c_py_exc_eof_error) = 1 then
-					Result := Py_eof_error
-				elseif c_py_err_exception_matches (c_py_exc_runtime_error) = 1 then
-					if c_py_err_exception_matches (c_py_exc_not_implemented_error) = 1 then
-						Result := Py_not_implemented_error
-					else
-						Result := Py_runtime_error
-					end
-				elseif c_py_err_exception_matches (c_py_exc_name_error) = 1 then
-					if c_py_err_exception_matches (c_py_exc_unbound_local_error) = 1 then
-						Result := Py_unbound_local_error
-					else
-						Result := Py_name_error
-					end
-				elseif c_py_err_exception_matches (c_py_exc_attribute_error) = 1 then
-					Result := Py_attribute_error
-				elseif c_py_err_exception_matches (c_py_exc_syntax_error) = 1 then
-					if c_py_err_exception_matches (c_py_exc_indentation_error) = 1 then
-						if c_py_err_exception_matches (c_py_exc_tab_error) = 1 then
-							Result := Py_tab_error
-						else
-							Result := Py_indentation_error
-						end
-					else
-						Result := Py_syntax_error
-					end
-				elseif c_py_err_exception_matches (c_py_exc_type_error) = 1 then
-					Result := Py_type_error
-				elseif c_py_err_exception_matches (c_py_exc_assertion_error) = 1 then
-					Result := Py_assertion_error
-				elseif c_py_err_exception_matches (c_py_exc_lookup_error) = 1 then
-					if c_py_err_exception_matches (c_py_exc_index_error) = 1 then
-						Result := Py_index_error
-					elseif c_py_err_exception_matches (c_py_exc_key_error) = 1 then
-						Result := Py_key_error
-					else
-						Result := Py_lookup_error
-					end
-				elseif c_py_err_exception_matches (c_py_exc_arithmetic_error) = 1 then
-					if c_py_err_exception_matches (c_py_exc_overflow_error) = 1 then
-						Result := Py_overflow_error
-					elseif c_py_err_exception_matches (c_py_exc_floating_point_error) = 1 then
-						Result := Py_floating_point_error
-					elseif c_py_err_exception_matches (c_py_exc_zero_division_error) = 1 then
-						Result := Py_zero_division_error
-					else
-						Result := Py_arithmetic_error
-					end
-				elseif c_py_err_exception_matches (c_py_exc_value_error) = 1 then
-					if c_py_err_exception_matches (c_py_exc_unicode_error) = 1 then
-						if c_py_err_exception_matches (c_py_exc_unicode_encode_error) = 1 then
-							Result := Py_unicode_encode_error
-						elseif c_py_err_exception_matches (c_py_exc_unicode_decode_error) = 1 then
-							Result := Py_unicode_decode_error
-						elseif c_py_err_exception_matches (c_py_exc_unicode_translate_error) = 1 then
-							Result := Py_unicode_translate_error
-						else
-							Result := Py_unicode_error
-						end
-					else
-						Result := Py_value_error
-					end
-				elseif c_py_err_exception_matches (c_py_exc_memory_error) = 1 then
-					Result := Py_memory_error
-				elseif c_py_err_exception_matches (c_py_exc_reference_error) = 1 then
-					Result := Py_reference_error
-				elseif c_py_err_exception_matches (c_py_exc_system_error) = 1 then
-					Result := Py_system_error
-				else
-					Result := Py_standard_error
-				end
-			elseif c_py_err_exception_matches (c_py_exc_warning) = 1 then
-				if c_py_err_exception_matches (c_py_exc_user_warning) = 1 then
-					Result := Py_user_warning
-				elseif c_py_err_exception_matches (c_py_exc_deprecation_warning) = 1 then
-					Result := Py_deprecation_warning
-				elseif c_py_err_exception_matches (c_py_exc_pending_deprecation_warning) = 1 then
-					Result := Py_pending_deprecation_warning
-				elseif c_py_err_exception_matches (c_py_exc_syntax_warning) = 1 then
-					Result := Py_syntax_warning
-						--				elseif c_py_err_exception_matches (c_py_exc_overflow_warning) = 1 then
-						--					Result := Py_overflow_warning
-				elseif c_py_err_exception_matches (c_py_exc_runtime_warning) = 1 then
-					Result := Py_runtime_warning
-				elseif c_py_err_exception_matches (c_py_exc_future_warning) = 1 then
-					Result := Py_future_warning
-				else
-					Result := Py_warning
-				end
 			else
 				Result := Py_exception
 			end
@@ -336,7 +355,7 @@ feature -- Basic routines (API)
 	class_type: PYTHON_TYPE
 			-- Type object representation in Eiffel of a Python class
 		once
-			create Result.borrowed (c_py_class_type)
+			create Result.borrowed (c_py_type_type)
 		end
 
 	dictionary_type: PYTHON_TYPE
@@ -348,7 +367,7 @@ feature -- Basic routines (API)
 	integer_type: PYTHON_TYPE
 			-- Type object representation in Eiffel of a Python integer
 		once
-			create Result.borrowed (c_py_int_type)
+			create Result.borrowed ({PY_LONG_OBJECT}.py_long_type)
 		end
 
 	boolean_type: PYTHON_TYPE
@@ -384,7 +403,8 @@ feature -- Basic routines (API)
 	string_type: PYTHON_TYPE
 			-- Type object representation in Eiffel of a Python string
 		once
-			create Result.borrowed (c_py_string_type)
+				--create Result.borrowed (c_py_string_type)
+			create Result.borrowed ({PY_UNICODE_OBJECT}.py_unicode_type)
 		end
 
 	none_object: PYTHON_NONE
@@ -531,22 +551,30 @@ feature {NONE} -- Externals
 
 feature {NONE} -- Externals (Classes)
 
-	c_py_class_type: POINTER
-			-- This instance of PyTypeObject represents the Python class type.
-			-- This is exposed to Python programs as types.ClassType.
-		external
-			"C [macro %"Python.h%"]"
-		alias
-			"&PyClass_Type"
-		end
+		--	c_py_class_type: POINTER
+		--			-- This instance of PyTypeObject represents the Python class type.
+		--			-- This is exposed to Python programs as types.ClassType.
+		--		obsolete
+		--			"Use c_py_type_type"
+		--		external
+		--			"C inline use <Python.h>"
+		--		alias
+		--			"[
+		--				#if PY_MAJOR_VERSION >= 3
+		--					return &PyType_Type
+		--				#else
+		--					return &PyClass_Type
+		--				#endif
+		--			]"
+		--		end
 
-	c_py_class_check (o: POINTER): INTEGER
-			-- Returns true if `o'  is a class object, or a subtype of a class object.
-		external
-			"C [macro %"Python.h%"] (PyObject *): int"
-		alias
-			"PyClass_Check"
-		end
+		--	c_py_class_check (o: POINTER): INTEGER
+		--			-- Returns true if `o'  is a class object, or a subtype of a class object.
+		--		external
+		--			"C [macro %"Python.h%"] (PyObject *): int"
+		--		alias
+		--			"PyClass_Check"
+		--		end
 
 feature {NONE} -- Externals (Dictionary Objects)
 
@@ -692,20 +720,20 @@ feature {NONE} -- Externals (Dictionary Objects)
 
 feature {NONE} -- Externals (Error)
 
+	c_py_exc_generator_exit: POINTER
+			--
+		external
+			"C [macro %"Python.h%"]:PyObject *"
+		alias
+			"PyExc_GeneratorExit"
+		end
+
 	c_py_exc_exception: POINTER
 			--
 		external
 			"C [macro %"Python.h%"]:PyObject *"
 		alias
 			"PyExc_Exception"
-		end
-
-	c_py_exc_standard_error: POINTER
-			--
-		external
-			"C [macro %"Python.h%"]:PyObject *"
-		alias
-			"PyExc_StandardError"
 		end
 
 	c_py_exc_lookup_error: POINTER
@@ -1047,6 +1075,166 @@ feature {NONE} -- Externals (Error)
 			"PyExc_ZeroDivisionError"
 		end
 
+	c_py_exc_stop_async_iteration: POINTER
+			-- Must be raised by __anext__() method of an asynchronous iterator object to stop the iteration.
+		external
+			"C [macro %"Python.h%"]:PyObject *"
+		alias
+			"PyExc_StopAsyncIteration"
+		end
+
+	c_py_exc_buffer_error: POINTER
+			-- Raised when a buffer related operation cannot be performed.
+		external
+			"C [macro %"Python.h%"]:PyObject *"
+		alias
+			"PyExc_BufferError"
+		end
+
+	c_py_exc_module_not_found_error: POINTER
+			-- Raised when a buffer related operation cannot be performed.
+		external
+			"C [macro %"Python.h%"]:PyObject *"
+		alias
+			"PyExc_ModuleNotFoundError"
+		end
+
+	c_py_exc_blocking_io_error: POINTER
+			-- Raised when an operation would block on an object (e.g. socket) set for non-blocking operation.
+			-- Corresponds to errno EAGAIN, EALREADY, EWOULDBLOCK and EINPROGRESS.
+		external
+			"C [macro %"Python.h%"]:PyObject *"
+		alias
+			"PyExc_BlockingIOError"
+		end
+
+	c_py_exc_child_process_error: POINTER
+			-- Raised when an operation on a child process failed.
+			-- Corresponds to errno ECHILD.
+		external
+			"C [macro %"Python.h%"]:PyObject *"
+		alias
+			"PyExc_ChildProcessError"
+		end
+
+	c_py_exc_connection_error: POINTER
+			-- A base class for connection-related issues.
+			-- Subclasses are BrokenPipeError, ConnectionAbortedError, ConnectionRefusedError and ConnectionResetError.		
+		external
+			"C [macro %"Python.h%"]:PyObject *"
+		alias
+			"PyExc_ConnectionError"
+		end
+
+	c_py_exc_connection_aborted_error: POINTER
+			-- A subclass of ConnectionError, raised when a connection attempt is aborted by the peer.
+			-- Corresponds to errno ECONNABORTED.		
+		external
+			"C [macro %"Python.h%"]:PyObject *"
+		alias
+			"PyExc_ConnectionAbortedError"
+		end
+
+	c_py_exc_connection_refused_error: POINTER
+			-- A subclass of ConnectionError, raised when a connection attempt is refused by the peer.
+			-- Corresponds to errno ECONNREFUSED.
+		external
+			"C [macro %"Python.h%"]:PyObject *"
+		alias
+			"PyExc_ConnectionRefusedError"
+		end
+
+	c_py_exc_connection_reset_error: POINTER
+			-- A subclass of ConnectionError, raised when a connection is reset by the peer.
+			-- Corresponds to errno ECONNRESET.
+		external
+			"C [macro %"Python.h%"]:PyObject *"
+		alias
+			"PyExc_ConnectionResetError"
+		end
+
+	c_py_exc_broken_pipe_error: POINTER
+			-- A subclass of ConnectionError, raised when trying to write on a pipe while the other end has been closed, or trying to write on a socket which has been shutdown for writing.
+			-- Corresponds to errno EPIPE and ESHUTDOWN.		
+		external
+			"C [macro %"Python.h%"]:PyObject *"
+		alias
+			"PyExc_BrokenPipeError"
+		end
+
+	c_py_exc_file_exists_error: POINTER
+			-- Raised when trying to create a file or directory which already exists.
+			-- Corresponds to errno EEXIST.
+		external
+			"C [macro %"Python.h%"]:PyObject *"
+		alias
+			"PyExc_FileExistsError"
+		end
+
+	c_py_exc_file_not_found_error: POINTER
+			-- Raised when a file or directory is requested but doesn’t exist.
+			--Corresponds to errno ENOENT.
+		external
+			"C [macro %"Python.h%"]:PyObject *"
+		alias
+			"PyExc_FileNotFoundError"
+		end
+
+	c_py_exc_interrupted_error: POINTER
+			-- Raised when a system call is interrupted by an incoming signal. Corresponds to errno EINTR.
+			-- Changed in version 3.5: Python now retries system calls when a syscall is interrupted by a signal,
+			-- except if the signal handler raises an exception (see PEP 475 for the rationale), instead of raising InterruptedError.		
+		external
+			"C [macro %"Python.h%"]:PyObject *"
+		alias
+			"PyExc_InterruptedError"
+		end
+
+	c_py_exc_is_a_directory_error: POINTER
+			-- Raised when a file operation (such as os.remove()) is requested on a directory.
+			-- Corresponds to errno EISDIR.	
+		external
+			"C [macro %"Python.h%"]:PyObject *"
+		alias
+			"PyExc_IsADirectoryError"
+		end
+
+	c_py_exc_not_a_directory_error: POINTER
+			-- Raised when a directory operation (such as os.listdir()) is requested on something which is not a directory.
+			-- Corresponds to errno ENOTDIR.	
+		external
+			"C [macro %"Python.h%"]:PyObject *"
+		alias
+			"PyExc_NotADirectoryError"
+		end
+
+	c_py_exc_permission_error: POINTER
+			-- Raised when trying to run an operation without the adequate access rights - for example filesystem permissions.
+			-- Corresponds to errno EACCES and EPERM.		
+		external
+			"C [macro %"Python.h%"]:PyObject *"
+		alias
+			"PyExc_PermissionError"
+		end
+
+	c_py_exc_process_lookup_error: POINTER
+			-- Raised when a given process doesn’t exist.
+			-- Corresponds to errno ESRCH.
+		external
+			"C [macro %"Python.h%"]:PyObject *"
+		alias
+			"PyExc_ProcessLookupError"
+		end
+
+	c_py_exc_timeout_error: POINTER
+			-- Raised when a system function timed out at the system level.
+			-- Corresponds to errno ETIMEDOUT.		
+		external
+			"C [macro %"Python.h%"]:PyObject *"
+		alias
+			"PyExc_TimeoutError"
+		end
+
 	c_py_err_occurred: POINTER
 			-- Return value: Borrowed reference.
 			-- Test whether the error indicator is set.
@@ -1174,66 +1362,6 @@ feature {NONE} -- Externals (Import)
 			"C | %"Python.h%""
 		alias
 			"PyImport_GetModuleDict"
-		end
-
-feature {NONE} -- Externals (Integer)
-
-	c_py_int_type: POINTER
-			-- This instance of PyTypeObject represents the Python plain integer type.
-			-- This is the same object as types.IntType.
-
-		external
-			"C [macro %"Python.h%"]"
-		alias
-			"&PyInt_Type"
-		end
-
-	c_py_int_check (o: POINTER): INTEGER
-			-- Returns true if o is of type PyInt_Type or a subtype of PyInt_Type.
-			-- Changed in version 2.2: Allowed subtypes to be accepted.
-		external
-			"C [macro %"Python.h%"](PyObject *): int"
-		alias
-			"PyInt_Check"
-		end
-
-	c_py_int_check_exact (o: POINTER): INTEGER
-			-- Returns true if o is of type PyInt_Type,
-			-- but not a subtype of PyInt_Type. New in version 2.2.
-
-		external
-			"C [macro %"Python.h%"](PyObject *): int"
-		alias
-			"PyInt_CheckExact"
-		end
-
-	c_py_int_from_long (i: INTEGER): POINTER
-			-- Return value: New reference.
-			-- Creates a new integer object with a value of ival.
-			-- The current implementation keeps an array of integer objects for all integers between -1 and 100,
-			-- when you create an int in that range you actually just get back a reference to the existing object.
-			-- So it should be possible to change the value of 1.
-			-- I suspect the behaviour of Python in this case is undefined. :-)
-		external
-			"C | %"Python.h%""
-		alias
-			"PyInt_FromLong"
-		end
-
-	c_py_int_as_long (i: POINTER): INTEGER
-			-- Will first attempt to cast the object to a PyIntObject, if it is not already one, and then return its value.
-		external
-			"C | %"Python.h%""
-		alias
-			"PyInt_AsLong"
-		end
-
-	c_py_int_get_max: INTEGER
-			-- Returns the system's idea of the largest integer it can handle (LONG_MAX  as defined in the system header files).
-		external
-			"C | %"Python.h%""
-		alias
-			"PyInt_GetMax"
 		end
 
 feature {NONE} -- Externals (Boolean)
@@ -1610,28 +1738,22 @@ feature {NONE} -- Externals (Object Protocol)
 			"PyObject_DelAttr"
 		end
 
-	c_py_object_cmp (o1, o2, r: POINTER): INTEGER
-			-- Compare the values of `o1' and `o2' using a routine provided by `o1',
-			-- if one exists, otherwise with a routine provided by `o2'.
-			-- The result of the comparison is returned in result.
-			-- Returns -1 on failure.
-			-- This is the equivalent of the Python statement "r = cmp(o1, o2)".
+	c_py_object_cmp, c_py_object_rich_compare (o1, o2: POINTER; opid: INTEGER): POINTER
+			--Compare the values of `o1` and `o2` using the operation specified by opid.
+			-- which must be one of Py_LT, Py_LE, Py_EQ, Py_NE, Py_GT, or Py_GE, corresponding to <, <=, ==, !=, >, or >= respectively.
+			-- This is the equivalent of the Python expression `o1 op o2`, where op is the operator corresponding to opid. Returns the value of the comparison on success, or NULL on failure.
 		external
 			"C | %"Python.h%""
 		alias
-			"PyObject_Cmp"
+			"PyObject_RichCompare"
 		end
 
-	c_py_object_compare (o1, o2: POINTER): INTEGER
-			-- Compare the values of `o1' and `o2' using a routine provided by `o1',
-			-- if one exists, otherwise with a routine provided by `o2'.
-			-- Returns the result of the comparison on success.
-			-- On error, the value returned is undefined; use PyErr_Occurred() to detect an error.
-			-- This is equivalent to the Python expression "cmp(o1, o2)".
+	c_py_object_compare, c_py_object_rich_compare_bool (o1, o2: POINTER; opid: INTEGER): INTEGER
+			--Compare the values of o1 and o2 using the operation specified by opid, which must be one of Py_LT, Py_LE, Py_EQ, Py_NE, Py_GT, or Py_GE, corresponding to <, <=, ==, !=, >, or >= respectively. Returns -1 on error, 0 if the result is false, 1 otherwise. This is the equivalent of the Python expression o1 op o2, where op is the operator corresponding to opid.
 		external
 			"C | %"Python.h%""
 		alias
-			"PyObject_Compare"
+			"PyObject_RichCompareBool"
 		end
 
 	c_py_object_repr (o: POINTER): POINTER
@@ -1656,18 +1778,6 @@ feature {NONE} -- Externals (Object Protocol)
 			"C | %"Python.h%""
 		alias
 			"PyObject_Str"
-		end
-
-	c_py_object_unicode (o: POINTER): POINTER
-			-- Return value:  New reference.
-			-- Compute a Unicode string representation of object `o'.
-			-- Returns the Unicode string representation on success, NULL on failure.
-			-- This is the equivalent of the Python expression "unistr(o)".
-			-- Called by the unistr() built-in function.
-		external
-			"C | %"Python.h%""
-		alias
-			"PyObject_Unicode"
 		end
 
 	c_py_object_is_instance (o, c: POINTER): INTEGER
@@ -1887,113 +1997,113 @@ feature {NONE} -- Externals (Sequence protocol)
 
 feature {NONE} -- Externals (String Objects)
 
-	c_py_string_type: POINTER
-			--  This instance of PyTypeObject represents the Python string type;
-			-- it is the same object as types.TypeType in the Python layer.
-		external
-			"C [macro %"Python.h%"]"
-		alias
-			"&PyString_Type"
-		end
+		--	c_py_string_type: POINTER
+		--			--  This instance of PyTypeObject represents the Python string type;
+		--			-- it is the same object as types.TypeType in the Python layer.
+		--		external
+		--			"C [macro %"Python.h%"]"
+		--		alias
+		--			"&PyString_Type"
+		--		end
 
-	c_py_string_from_string (s: POINTER): POINTER
-			-- Return value:  New reference.
-			-- Returns a new string object with the value `s' on success,
-			-- and NULL on failure. The parameter `s' must not be NULL;
-			-- it will not be checked.
-		external
-			"C | %"Python.h%""
-		alias
-			"PyString_FromString"
-		end
+		--	c_py_string_from_string (s: POINTER): POINTER
+		--			-- Return value:  New reference.
+		--			-- Returns a new string object with the value `s' on success,
+		--			-- and NULL on failure. The parameter `s' must not be NULL;
+		--			-- it will not be checked.
+		--		external
+		--			"C | %"Python.h%""
+		--		alias
+		--			"PyString_FromString"
+		--		end
 
-	c_py_string_check (o: POINTER): INTEGER
-			--Returns true if the object `o' is a string object or
-			-- an instance of a subtype of the string type.
-			-- Changed in version 2.2: Allowed subtypes to be accepted.
-		external
-			"C [macro %"Python.h%"] (PyObject *): int"
-		alias
-			"PyString_Check"
-		end
+		--	c_py_string_check (o: POINTER): INTEGER
+		--			--Returns true if the object `o' is a string object or
+		--			-- an instance of a subtype of the string type.
+		--			-- Changed in version 2.2: Allowed subtypes to be accepted.
+		--		external
+		--			"C [macro %"Python.h%"] (PyObject *): int"
+		--		alias
+		--			"PyString_Check"
+		--		end
 
-	c_py_string_check_exact (o: POINTER): INTEGER
-			-- Returns true if the object `o' is a string object,
-			-- but not an instance of a subtype of the string type. New in version 2.2.
-		external
-			"C [macro %"Python.h%"](PyObject *): int"
-		alias
-			"PyString_CheckExact"
-		end
+		--	c_py_string_check_exact (o: POINTER): INTEGER
+		--			-- Returns true if the object `o' is a string object,
+		--			-- but not an instance of a subtype of the string type. New in version 2.2.
+		--		external
+		--			"C [macro %"Python.h%"](PyObject *): int"
+		--		alias
+		--			"PyString_CheckExact"
+		--		end
 
-	c_py_string_from_string_and_size (s: POINTER; len: INTEGER): POINTER
-			-- Return value: New reference.
-			-- Returns a new string object with the value `s' and length len on success,
-			-- and NULL on failure. If `o' is NULL, the contents of the string are uninitialized.
-		external
-			"C | %"Python.h%""
-		alias
-			"PyString_FromStringAndSize"
-		end
+		--	c_py_string_from_string_and_size (s: POINTER; len: INTEGER): POINTER
+		--			-- Return value: New reference.
+		--			-- Returns a new string object with the value `s' and length len on success,
+		--			-- and NULL on failure. If `o' is NULL, the contents of the string are uninitialized.
+		--		external
+		--			"C | %"Python.h%""
+		--		alias
+		--			"PyString_FromStringAndSize"
+		--		end
 
-	c_py_string_size (o: POINTER): INTEGER
-			-- Returns the length of the string in string object string.
-		external
-			"C | %"Python.h%""
-		alias
-			"PyString_Size"
-		end
+		--	c_py_string_size (o: POINTER): INTEGER
+		--			-- Returns the length of the string in string object string.
+		--		external
+		--			"C | %"Python.h%""
+		--		alias
+		--			"PyString_Size"
+		--		end
 
-	c_py_string_as_string (s: POINTER): POINTER
-			-- Returns a NUL-terminated representation of the contents of string.
-			-- The pointer refers to the internal buffer of string, not a copy.
-			-- The data must not be modified in any way,
-			-- unless the string was just created using PyString_FromStringAndSize(NULL, size).
-			-- It must not be deallocated.
-			-- If string is a Unicode object, this function computes the default encoding of string and operates on that.
-			-- If string is not a string object at all, PyString_AsString() returns NULL and raises TypeError.
-		external
-			"C | %"Python.h%""
-		alias
-			"PyString_AsString"
-		end
+		--	c_py_string_as_string (s: POINTER): POINTER
+		--			-- Returns a NUL-terminated representation of the contents of string.
+		--			-- The pointer refers to the internal buffer of string, not a copy.
+		--			-- The data must not be modified in any way,
+		--			-- unless the string was just created using PyString_FromStringAndSize(NULL, size).
+		--			-- It must not be deallocated.
+		--			-- If string is a Unicode object, this function computes the default encoding of string and operates on that.
+		--			-- If string is not a string object at all, PyString_AsString() returns NULL and raises TypeError.
+		--		external
+		--			"C | %"Python.h%""
+		--		alias
+		--			"PyString_AsString"
+		--		end
 
-	c_py_string_format (f: POINTER; args: INTEGER): POINTER
-			-- Return value: New reference.
-			-- Returns a new string object from `f' and `args'.
-			-- Analogous to format % `args'.
-			-- The `args' argument must be a tuple.
-		external
-			"C | %"Python.h%""
-		alias
-			"PyString_Format"
-		end
+		--	c_py_string_format (f: POINTER; args: INTEGER): POINTER
+		--			-- Return value: New reference.
+		--			-- Returns a new string object from `f' and `args'.
+		--			-- Analogous to format % `args'.
+		--			-- The `args' argument must be a tuple.
+		--		external
+		--			"C | %"Python.h%""
+		--		alias
+		--			"PyString_Format"
+		--		end
 
-	c_py_string_decode (s: POINTER; size: INTEGER; encoding, errors: POINTER): POINTER
-			-- Return value: New reference.
-			-- Creates an object by decoding `size' bytes of the encoded buffer `s'
-			-- using the codec registered for `encoding'.
-			-- `encoding' and `errors' have the same meaning as the parameters of the same name in the unicode() built-in function.
-			-- The codec to be used is looked up using the Python codec registry.
-			-- Returns NULL if an exception was raised by the codec.
-		external
-			"C | %"Python.h%""
-		alias
-			"PyString_Decode"
-		end
+		--	c_py_string_decode (s: POINTER; size: INTEGER; encoding, errors: POINTER): POINTER
+		--			-- Return value: New reference.
+		--			-- Creates an object by decoding `size' bytes of the encoded buffer `s'
+		--			-- using the codec registered for `encoding'.
+		--			-- `encoding' and `errors' have the same meaning as the parameters of the same name in the unicode() built-in function.
+		--			-- The codec to be used is looked up using the Python codec registry.
+		--			-- Returns NULL if an exception was raised by the codec.
+		--		external
+		--			"C | %"Python.h%""
+		--		alias
+		--			"PyString_Decode"
+		--		end
 
-	c_py_string_encode (s: POINTER; size: INTEGER; encoding, errors: POINTER): POINTER
-			-- Return value: New reference.
-			-- Encodes the char buffer `s' of the given `size'
-			-- by passing it to the codec registered for encoding and returns a Python object.
-			-- `encoding' and `errors' have the same meaning as the parameters of the same name in the string encode() method.
-			-- The codec to be used is looked up using the Python codec registry.
-			-- Returns NULL if an exception was raised by the codec.
-		external
-			"C | %"Python.h%""
-		alias
-			"PyString_Encode"
-		end
+		--	c_py_string_encode (s: POINTER; size: INTEGER; encoding, errors: POINTER): POINTER
+		--			-- Return value: New reference.
+		--			-- Encodes the char buffer `s' of the given `size'
+		--			-- by passing it to the codec registered for encoding and returns a Python object.
+		--			-- `encoding' and `errors' have the same meaning as the parameters of the same name in the string encode() method.
+		--			-- The codec to be used is looked up using the Python codec registry.
+		--			-- Returns NULL if an exception was raised by the codec.
+		--		external
+		--			"C | %"Python.h%""
+		--		alias
+		--			"PyString_Encode"
+		--		end
 
 feature {NONE} -- Externals (Tuple Objects)
 
@@ -2069,6 +2179,24 @@ feature {NONE} -- Externals (Type Objects)
 			"C | %"Python.h%""
 		alias
 			"PyType_IsSubtype"
+		end
+
+	c_py_type_check (o: POINTER): INTEGER
+			-- Return non-zero if the object o is a type object, including instances of types derived from the standard type object.
+			-- Return 0 in all other cases.
+		external
+			"C [macro %"Python.h%"] (PyObject *): int"
+		alias
+			"PyType_Check"
+		end
+
+	c_py_type_checkexact (o: POINTER): INTEGER
+			-- Return non-zero if the object o is a type object, but not a subtype of the standard type object.
+			-- Return 0 in all other cases.
+		external
+			"C [macro %"Python.h%"] (PyObject *): int"
+		alias
+			"PyType_CheckExact"
 		end
 
 feature {NONE} -- Externals (	 Objects)

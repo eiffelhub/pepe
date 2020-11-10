@@ -107,7 +107,7 @@ feature -- Access
 	unicode_out: PYTHON_USTRING
 			-- Unicode string representation of `Current' as it would be called by unicodestr () in Python
 		do
-			create Result.new (c_py_object_unicode (py_obj_ptr))
+			create Result.new ({PY_UNICODE_OBJECT}.py_unicode_as_unicode (py_obj_ptr))
 		end
 
 	hash_code: INTEGER
@@ -170,7 +170,7 @@ feature -- Status report
 		local
 			r: INTEGER
 		do
-			r := c_py_object_compare (py_obj_ptr,other.py_obj_ptr)
+			r := c_py_object_compare (py_obj_ptr,other.py_obj_ptr, 0) --define Py_LT 0
 			Result := r < 0
 		end
 
@@ -220,13 +220,13 @@ feature -- Status report
 	is_string: BOOLEAN
 			-- Is `Current' a Python string object?
 		do
-			Result := c_py_string_check (py_obj_ptr) = 1
+			Result := {PY_UNICODE_OBJECT}.py_unicode_check(py_obj_ptr) = 1
 		end
 
 	is_integer: BOOLEAN
 			-- Is `Current' a Python integer object?
 		do
-			Result := c_py_int_check (py_obj_ptr) = 1
+			Result := {PY_LONG_OBJECT}.py_long_check (py_obj_ptr) = 1
 		end
 
 	is_list: BOOLEAN

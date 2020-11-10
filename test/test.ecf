@@ -14,7 +14,7 @@
 		<setting name="console_application" value="true"/>
 		<setting name="dead_code_removal" value="feature"/>
 		<library name="base" location="$ISE_LIBRARY\library\base\base.ecf"/>
-		<library name="pepe" location="..\library\pepe.ecf"/>
+		<library name="pepe" location="..\library\pepe.ecf" readonly="False"/>
 		<cluster name="test" location=".\" recursive="true"/>
 	</target>
 </system>

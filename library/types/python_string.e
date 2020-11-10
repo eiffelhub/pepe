@@ -29,7 +29,7 @@ feature -- Initialization
 		do
 			a := s.to_c
 --			borrowed (c_py_string_from_string ($a))
-			new (c_py_string_from_string ($a)) -- FJR Oct 2009
+			new ({PY_BYTES_OBJECT}.py_bytes_from_string ($a))
 		end
 
 
@@ -38,7 +38,7 @@ feature -- Access
 	py_type_ptr: POINTER
 			-- Pointer to the type object
 		do
-			Result := c_py_string_type
+			Result := {PY_UNICODE_OBJECT}.py_unicode_type
 		end
 
 	string: STRING
@@ -46,7 +46,7 @@ feature -- Access
 		local
 			r: POINTER
 		do
-			r := c_py_string_as_string (py_obj_ptr)
+			r := {PY_UNICODE_OBJECT}.py_unicode_as_utf8 (py_obj_ptr)
 			create Result.make_from_c (r)
 		end
 
@@ -66,7 +66,7 @@ feature -- Measurement
 	size: INTEGER
 			-- Element count
 		do
-			Result := c_py_string_size (py_obj_ptr)
+			Result := {PY_UNICODE_OBJECT}.py_unicode_strlen (py_obj_ptr).as_integer_32
 		end
 
 
