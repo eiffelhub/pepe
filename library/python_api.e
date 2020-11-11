@@ -613,6 +613,39 @@ feature {NONE} -- Externals
 			"Py_CompileString"
 		end
 
+
+
+	c_py_eval_get_builtins
+			-- Get the "__bulitins_ attribute of the current namespace
+		external
+			"C | %"Python.h%""
+		alias
+			"PyEval_GetBuiltins"
+		end
+
+feature {NONE} -- Externals (Reference Counting)
+
+		c_py_incref (o: POINTER)
+				-- Increment the reference count for object `o`.
+				-- The object must not be NULL; if you aren’t sure that it isn’t NULL, use Py_XINCREF().			
+			require
+				not_null_object: o /= default_pointer
+			external
+				"C [macro %"Python.h%"](PyObject*)"
+			alias
+				"Py_INCREF"
+			end
+
+		c_py_xincref (o: POINTER)
+				-- Increment the reference count for object o.
+				-- The object may be NULL, in which case the macro has no effect.
+			external
+				"C [macro %"Python.h%"](PyObject*)"
+			alias
+				"Py_XINCREF"
+			end
+
+
 	c_py_decref (o: POINTER)
 			-- Decrement the reference count for object `o'.
 			-- The object must not be NULL; if you aren't sure that it isn't NULL,
@@ -627,46 +660,27 @@ feature {NONE} -- Externals
 			-- This means that any object that is reachable from a global variable should be in a consistent state before Py_DECREF() is invoked.
 			-- For example, code to delete an object from a list should copy a reference to the deleted object in a temporary variable,
 			-- update the list data structure, and then call Py_DECREF() for the temporary variable.
+		require
+			not_null_object: o /= default_pointer
 		external
 			"C [macro %"Python.h%"](PyObject*)"
 		alias
 			"Py_DECREF"
 		end
 
-	c_py_eval_get_builtins
-			-- Get the "__bulitins_ attribute of the current namespace
+	c_py_clear (o: POINTER)
+			-- Decrement the reference count for object `o`.
+			-- The object may be NULL, in which case the macro has no effect; otherwise the effect is the same as for Py_DECREF(), except that the argument is also set to NULL.
+			-- The warning for Py_DECREF() does not apply with respect to the object passed because the macro carefully uses a temporary variable and sets the argument to NULL before decrementing its reference count.
+			-- It is a good idea to use this macro whenever decrementing the reference count of an object that might be traversed during garbage collection.		
 		external
-			"C | %"Python.h%""
+			"C [macro %"Python.h%"](PyObject*)"
 		alias
-			"PyEval_GetBuiltins"
+			"Py_CLEAR"
 		end
 
 feature {NONE} -- Externals (Classes)
 
-		--	c_py_class_type: POINTER
-		--			-- This instance of PyTypeObject represents the Python class type.
-		--			-- This is exposed to Python programs as types.ClassType.
-		--		obsolete
-		--			"Use c_py_type_type"
-		--		external
-		--			"C inline use <Python.h>"
-		--		alias
-		--			"[
-		--				#if PY_MAJOR_VERSION >= 3
-		--					return &PyType_Type
-		--				#else
-		--					return &PyClass_Type
-		--				#endif
-		--			]"
-		--		end
-
-		--	c_py_class_check (o: POINTER): INTEGER
-		--			-- Returns true if `o'  is a class object, or a subtype of a class object.
-		--		external
-		--			"C [macro %"Python.h%"] (PyObject *): int"
-		--		alias
-		--			"PyClass_Check"
-		--		end
 
 feature {NONE} -- Externals (Dictionary Objects)
 
