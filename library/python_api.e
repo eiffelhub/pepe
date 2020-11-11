@@ -144,6 +144,15 @@ feature -- Access (Error)
 
 	Py_timeout_error: STRING = "Py_timeout_error"
 
+	Py_recursion_error: STRING = "Py_recursion_error"
+
+	Py_import_warning: STRING = "Py_import_warning"
+
+	Py_unicode_warning: STRING = "Py_unicode_warning"
+
+	Py_bytes_warning: STRING = "Py_bytes_warning"
+
+	Py_resource_warning: STRING = "Py_resource_warning"
 
 	ocurred_python_exception: STRING
 			-- String exception corresponding the python exception set.
@@ -201,41 +210,104 @@ feature -- Access (Error)
 					Result := Py_name_error
 				end
 			elseif c_py_err_exception_matches (c_py_exc_os_error) = 1 then
-					if c_py_err_exception_matches (c_py_exc_blocking_io_error) = 1 then
-						Result := Py_blocking_io_error
-					elseif c_py_err_exception_matches (c_py_exc_child_process_error) = 1  then
-						Result := Py_child_process_error
-					elseif c_py_err_exception_matches (c_py_exc_connection_error) = 1 then
-						if c_py_err_exception_matches (c_py_exc_broken_pipe_error) = 1 then
-							Result := Py_broken_pipe_error
-						elseif c_py_err_exception_matches (c_py_exc_connection_aborted_error) = 1 then
-							Result := Py_connection_aborted_error
-						elseif c_py_err_exception_matches (c_py_exc_connection_refused_error) = 1 then
-							Result := Py_connection_refused_error
-						elseif c_py_err_exception_matches (c_py_exc_connection_reset_error) = 1 then
-							Result := Py_connection_reset_error
-						else
-							Result := Py_connection_error
-						end
-					elseif c_py_err_exception_matches (c_py_exc_file_exists_error) = 1  then
-						Result := Py_file_exists_error
-					elseif c_py_err_exception_matches (c_py_exc_file_not_found_error) = 1  then
-						Result := Py_file_not_found_error
-					elseif c_py_err_exception_matches (c_py_exc_interrupted_error) = 1  then
-						Result := Py_interrupted_error
-					elseif c_py_err_exception_matches (c_py_exc_is_a_directory_error) = 1  then
-						Result := Py_is_a_directory_error
-					elseif c_py_err_exception_matches (c_py_exc_not_a_directory_error) = 1  then
-						Result := Py_not_a_directory_error
-					elseif c_py_err_exception_matches (c_py_exc_permission_error) = 1  then
-						Result := Py_permission_error
-					elseif c_py_err_exception_matches (c_py_exc_process_lookup_error) = 1  then
-						Result := Py_process_lookup_error
-					elseif c_py_err_exception_matches (c_py_exc_timeout_error) = 1  then
-						Result := Py_timeout_error
+				if c_py_err_exception_matches (c_py_exc_blocking_io_error) = 1 then
+					Result := Py_blocking_io_error
+				elseif c_py_err_exception_matches (c_py_exc_child_process_error) = 1 then
+					Result := Py_child_process_error
+				elseif c_py_err_exception_matches (c_py_exc_connection_error) = 1 then
+					if c_py_err_exception_matches (c_py_exc_broken_pipe_error) = 1 then
+						Result := Py_broken_pipe_error
+					elseif c_py_err_exception_matches (c_py_exc_connection_aborted_error) = 1 then
+						Result := Py_connection_aborted_error
+					elseif c_py_err_exception_matches (c_py_exc_connection_refused_error) = 1 then
+						Result := Py_connection_refused_error
+					elseif c_py_err_exception_matches (c_py_exc_connection_reset_error) = 1 then
+						Result := Py_connection_reset_error
 					else
-						Result := Py_os_error
+						Result := Py_connection_error
 					end
+				elseif c_py_err_exception_matches (c_py_exc_file_exists_error) = 1 then
+					Result := Py_file_exists_error
+				elseif c_py_err_exception_matches (c_py_exc_file_not_found_error) = 1 then
+					Result := Py_file_not_found_error
+				elseif c_py_err_exception_matches (c_py_exc_interrupted_error) = 1 then
+					Result := Py_interrupted_error
+				elseif c_py_err_exception_matches (c_py_exc_is_a_directory_error) = 1 then
+					Result := Py_is_a_directory_error
+				elseif c_py_err_exception_matches (c_py_exc_not_a_directory_error) = 1 then
+					Result := Py_not_a_directory_error
+				elseif c_py_err_exception_matches (c_py_exc_permission_error) = 1 then
+					Result := Py_permission_error
+				elseif c_py_err_exception_matches (c_py_exc_process_lookup_error) = 1 then
+					Result := Py_process_lookup_error
+				elseif c_py_err_exception_matches (c_py_exc_timeout_error) = 1 then
+					Result := Py_timeout_error
+				else
+					Result := Py_os_error
+				end
+			elseif c_py_err_exception_matches (c_py_exc_reference_error) = 1 then
+				Result := py_reference_error
+			elseif c_py_err_exception_matches (c_py_exc_runtime_error) = 1 then
+				if c_py_err_exception_matches (c_py_exc_not_implemented_error) = 1 then
+					Result := Py_not_implemented_error
+				elseif c_py_err_exception_matches (c_py_exc_recursion_error) = 1 then
+					Result := Py_recursion_error
+				else
+					Result := Py_runtime_error
+				end
+			elseif c_py_err_exception_matches (c_py_exc_syntax_error) = 1 then
+				if c_py_err_exception_matches (c_py_exc_indentation_error) = 1 then
+					if c_py_err_exception_matches (c_py_exc_tab_error) = 1 then
+						Result := Py_tab_error
+					else
+						Result := Py_indentation_error
+					end
+				else
+					Result := Py_syntax_error
+				end
+			elseif c_py_err_exception_matches (c_py_exc_system_error) = 1 then
+				Result := Py_system_error
+			elseif c_py_err_exception_matches (c_py_exc_type_error) = 1 then
+				Result := Py_type_error
+			elseif c_py_err_exception_matches (c_py_exc_value_error) = 1 then
+				if c_py_err_exception_matches (c_py_exc_unicode_error) = 1 then
+					if c_py_err_exception_matches (c_py_exc_unicode_encode_error) = 1 then
+						Result := Py_unicode_encode_error
+					elseif c_py_err_exception_matches (c_py_exc_unicode_decode_error) = 1 then
+						Result := Py_unicode_decode_error
+					elseif c_py_err_exception_matches (c_py_exc_unicode_translate_error) = 1 then
+						Result := Py_unicode_translate_error
+					else
+						Result := Py_unicode_error
+					end
+				else
+					Result := Py_value_error
+				end
+			elseif c_py_err_exception_matches (c_py_exc_warning) = 1 then
+				if c_py_err_exception_matches (c_py_exc_user_warning) = 1 then
+					Result := Py_user_warning
+				elseif c_py_err_exception_matches (c_py_exc_deprecation_warning) = 1 then
+					Result := Py_deprecation_warning
+				elseif c_py_err_exception_matches (c_py_exc_pending_deprecation_warning) = 1 then
+					Result := Py_pending_deprecation_warning
+				elseif c_py_err_exception_matches (c_py_exc_syntax_warning) = 1 then
+					Result := Py_syntax_warning
+				elseif c_py_err_exception_matches (c_py_exc_runtime_warning) = 1 then
+					Result := Py_runtime_warning
+				elseif c_py_err_exception_matches (c_py_exc_future_warning) = 1 then
+					Result := Py_future_warning
+				elseif c_py_err_exception_matches (c_py_exc_import_warning) = 1 then
+					Result := Py_import_warning
+				elseif c_py_err_exception_matches (c_py_exc_unicode_warning) = 1 then
+					Result := Py_unicode_warning
+				elseif c_py_err_exception_matches (c_py_exc_bytes_warning) = 1 then
+					Result := Py_bytes_warning
+				elseif c_py_err_exception_matches (c_py_err_resource_warning) = 1 then
+					Result := Py_resource_warning
+				else
+					Result := Py_warning
+				end
+
 			else
 				Result := Py_exception
 			end
@@ -468,18 +540,18 @@ feature {NONE} -- Externals
 		end
 
 	c_py_finalize_ex
-		-- Undo all initializations made by Py_Initialize() and subsequent use of Python/C API functions, and destroy all sub-interpreters
-		-- (see Py_NewInterpreter() below) that were created and not yet destroyed since the last call to Py_Initialize().
-		-- Ideally, this frees all memory allocated by the Python interpreter. This is a no-op when called for a second time (without calling Py_Initialize() again first).
-		-- Normally the return value is 0. If there were errors during finalization (flushing buffered data), -1 is returned.
-		-- This function is provided for a number of reasons. An embedding application might want to restart Python without having to restart the application itself.
-		-- An application that has loaded the Python interpreter from a dynamically loadable library (or DLL) might want to free all memory allocated by Python before unloading the DLL.
-		-- During a hunt for memory leaks in an application a developer might want to free all memory allocated by Python before exiting from the application.
-		-- Bugs and caveats: The destruction of modules and objects in modules is done in random order; this may cause destructors (__del__() methods) to fail when they depend on other objects (even functions) or modules.
-		-- Dynamically loaded extension modules loaded by Python are not unloaded. Small amounts of memory allocated by the Python interpreter may not be freed (if you find a leak, please report it).
-		-- Memory tied up in circular references between objects is not freed. Some memory allocated by extension modules may not be freed.
-		-- Some extensions may not work properly if their initialization routine is called more than once; this can happen if an application calls Py_Initialize() and Py_FinalizeEx() more than once.
-		--  Raises an auditing event cpython._PySys_ClearAuditHooks with no arguments.	
+			-- Undo all initializations made by Py_Initialize() and subsequent use of Python/C API functions, and destroy all sub-interpreters
+			-- (see Py_NewInterpreter() below) that were created and not yet destroyed since the last call to Py_Initialize().
+			-- Ideally, this frees all memory allocated by the Python interpreter. This is a no-op when called for a second time (without calling Py_Initialize() again first).
+			-- Normally the return value is 0. If there were errors during finalization (flushing buffered data), -1 is returned.
+			-- This function is provided for a number of reasons. An embedding application might want to restart Python without having to restart the application itself.
+			-- An application that has loaded the Python interpreter from a dynamically loadable library (or DLL) might want to free all memory allocated by Python before unloading the DLL.
+			-- During a hunt for memory leaks in an application a developer might want to free all memory allocated by Python before exiting from the application.
+			-- Bugs and caveats: The destruction of modules and objects in modules is done in random order; this may cause destructors (__del__() methods) to fail when they depend on other objects (even functions) or modules.
+			-- Dynamically loaded extension modules loaded by Python are not unloaded. Small amounts of memory allocated by the Python interpreter may not be freed (if you find a leak, please report it).
+			-- Memory tied up in circular references between objects is not freed. Some memory allocated by extension modules may not be freed.
+			-- Some extensions may not work properly if their initialization routine is called more than once; this can happen if an application calls Py_Initialize() and Py_FinalizeEx() more than once.
+			--  Raises an auditing event cpython._PySys_ClearAuditHooks with no arguments.
 		external
 			"C | %"Python.h%""
 		alias
@@ -1139,7 +1211,7 @@ feature {NONE} -- Externals (Error)
 
 	c_py_exc_connection_error: POINTER
 			-- A base class for connection-related issues.
-			-- Subclasses are BrokenPipeError, ConnectionAbortedError, ConnectionRefusedError and ConnectionResetError.		
+			-- Subclasses are BrokenPipeError, ConnectionAbortedError, ConnectionRefusedError and ConnectionResetError.
 		external
 			"C [macro %"Python.h%"]:PyObject *"
 		alias
@@ -1148,7 +1220,7 @@ feature {NONE} -- Externals (Error)
 
 	c_py_exc_connection_aborted_error: POINTER
 			-- A subclass of ConnectionError, raised when a connection attempt is aborted by the peer.
-			-- Corresponds to errno ECONNABORTED.		
+			-- Corresponds to errno ECONNABORTED.
 		external
 			"C [macro %"Python.h%"]:PyObject *"
 		alias
@@ -1175,7 +1247,7 @@ feature {NONE} -- Externals (Error)
 
 	c_py_exc_broken_pipe_error: POINTER
 			-- A subclass of ConnectionError, raised when trying to write on a pipe while the other end has been closed, or trying to write on a socket which has been shutdown for writing.
-			-- Corresponds to errno EPIPE and ESHUTDOWN.		
+			-- Corresponds to errno EPIPE and ESHUTDOWN.
 		external
 			"C [macro %"Python.h%"]:PyObject *"
 		alias
@@ -1203,7 +1275,7 @@ feature {NONE} -- Externals (Error)
 	c_py_exc_interrupted_error: POINTER
 			-- Raised when a system call is interrupted by an incoming signal. Corresponds to errno EINTR.
 			-- Changed in version 3.5: Python now retries system calls when a syscall is interrupted by a signal,
-			-- except if the signal handler raises an exception (see PEP 475 for the rationale), instead of raising InterruptedError.		
+			-- except if the signal handler raises an exception (see PEP 475 for the rationale), instead of raising InterruptedError.
 		external
 			"C [macro %"Python.h%"]:PyObject *"
 		alias
@@ -1212,7 +1284,7 @@ feature {NONE} -- Externals (Error)
 
 	c_py_exc_is_a_directory_error: POINTER
 			-- Raised when a file operation (such as os.remove()) is requested on a directory.
-			-- Corresponds to errno EISDIR.	
+			-- Corresponds to errno EISDIR.
 		external
 			"C [macro %"Python.h%"]:PyObject *"
 		alias
@@ -1221,7 +1293,7 @@ feature {NONE} -- Externals (Error)
 
 	c_py_exc_not_a_directory_error: POINTER
 			-- Raised when a directory operation (such as os.listdir()) is requested on something which is not a directory.
-			-- Corresponds to errno ENOTDIR.	
+			-- Corresponds to errno ENOTDIR.
 		external
 			"C [macro %"Python.h%"]:PyObject *"
 		alias
@@ -1230,7 +1302,7 @@ feature {NONE} -- Externals (Error)
 
 	c_py_exc_permission_error: POINTER
 			-- Raised when trying to run an operation without the adequate access rights - for example filesystem permissions.
-			-- Corresponds to errno EACCES and EPERM.		
+			-- Corresponds to errno EACCES and EPERM.
 		external
 			"C [macro %"Python.h%"]:PyObject *"
 		alias
@@ -1248,11 +1320,54 @@ feature {NONE} -- Externals (Error)
 
 	c_py_exc_timeout_error: POINTER
 			-- Raised when a system function timed out at the system level.
-			-- Corresponds to errno ETIMEDOUT.		
+			-- Corresponds to errno ETIMEDOUT.
 		external
 			"C [macro %"Python.h%"]:PyObject *"
 		alias
 			"PyExc_TimeoutError"
+		end
+
+	c_py_exc_recursion_error: POINTER
+			-- This exception is derived from RuntimeError.
+			-- It is raised when the interpreter detects that the maximum recursion depth (see sys.getrecursionlimit()) is exceeded.
+		external
+			"C [macro %"Python.h%"]:PyObject *"
+		alias
+			"PyExc_RecursionError"
+		end
+
+	c_py_exc_import_warning: POINTER
+			-- Base class for warnings about probable mistakes in module imports.
+			-- Ignored by the default warning filters. Enabling the Python Development Mode shows this warning.	
+		external
+			"C [macro %"Python.h%"]:PyObject *"
+		alias
+			"PyExc_ImportWarning"
+		end
+
+	c_py_exc_unicode_warning: POINTER
+			-- Base class for warnings related to Unicode.
+		external
+			"C [macro %"Python.h%"]:PyObject *"
+		alias
+			"PyExc_UnicodeWarning"
+		end
+
+	c_py_exc_bytes_warning: POINTER
+			-- Base class for warnings related to bytes and bytearray.
+		external
+			"C [macro %"Python.h%"]:PyObject *"
+		alias
+			"PyExc_BytesWarning"
+		end
+
+	c_py_err_resource_warning: POINTER
+			-- Base class for warnings related to resource usage.	
+			-- Ignored by the default warning filters. Enabling the Python Development Mode shows this warning.
+		external
+			"C [macro %"Python.h%"]:PyObject *"
+		alias
+			"PyErr_ResourceWarning"
 		end
 
 	c_py_err_occurred: POINTER
@@ -1757,7 +1872,6 @@ feature {NONE} -- Externals (Object Protocol)
 		alias
 			"PyObject_DelAttr"
 		end
-
 
 	c_py_object_compare_cmp (o1, o2: POINTER): INTEGER
 			-- Compare the values of `o1' and `o2' using a routine provided by `o1',
