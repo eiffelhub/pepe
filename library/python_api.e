@@ -1338,7 +1338,7 @@ feature {NONE} -- Externals (Error)
 
 	c_py_exc_import_warning: POINTER
 			-- Base class for warnings about probable mistakes in module imports.
-			-- Ignored by the default warning filters. Enabling the Python Development Mode shows this warning.	
+			-- Ignored by the default warning filters. Enabling the Python Development Mode shows this warning.
 		external
 			"C [macro %"Python.h%"]:PyObject *"
 		alias
@@ -1362,7 +1362,7 @@ feature {NONE} -- Externals (Error)
 		end
 
 	c_py_err_resource_warning: POINTER
-			-- Base class for warnings related to resource usage.	
+			-- Base class for warnings related to resource usage.
 			-- Ignored by the default warning filters. Enabling the Python Development Mode shows this warning.
 		external
 			"C [macro %"Python.h%"]:PyObject *"
@@ -1822,6 +1822,34 @@ feature {NONE} -- Externals (Object Protocol)
 			"PyObject_SetAttrString"
 		end
 
+	c_py_object_generic_set_attribute (o, a, v: POINTER): INTEGER
+			-- Generic attribute setter and deleter function that is meant to be put into a type object’s tp_setattro slot.
+			-- It looks for a data descriptor in the dictionary of classes in the object’s MRO, and if found it takes preference over setting or deleting the attribute in the instance dictionary.
+			-- Otherwise, the attribute is set or deleted in the object’s __dict__ (if present). On success, 0 is returned, otherwise an AttributeError is raised and -1 is returned.
+		external
+			"C | %"Python.h%""
+		alias
+			"PyObject_GenericSetAttr"
+		end
+
+	c_py_object_generic_get_dictionary (o, context: POINTER): POINTER
+			--Return value: New reference.
+			--A generic implementation for the getter of a __dict__ descriptor. It creates the dictionary if necessary.
+		external
+			"C inline use <Python.h>"
+		alias
+			"return PyObject_GenericGetDict((PyObject *)$o, (void *)$context)"
+		end
+
+	c_py_object_generic_set_dictionary (o, v, c: POINTER): POINTER
+			-- A generic implementation for the setter of a __dict__ descriptor.
+			-- This implementation does not allow the dictionary to be deleted.
+		external
+			"C inline use <Python.h>"
+		alias
+			"return PyObject_GenericSetDict((PyObject *)$o, (PyObject *)$v, (void *)$c)"
+		end
+
 	c_py_object_del_attribute_string (o, a: POINTER): INTEGER
 			-- Delete attribute named `a' (char *), for object `o'.
 			-- Returns -1 on failure.
@@ -1873,6 +1901,18 @@ feature {NONE} -- Externals (Object Protocol)
 			"PyObject_DelAttr"
 		end
 
+	c_py_object_generic_get_attribute (o, a: POINTER): INTEGER
+			-- Return value: New reference.
+			-- Generic attribute getter function that is meant to be put into a type object’s tp_getattro slot.
+			-- It looks for a descriptor in the dictionary of classes in the object’s MRO as well as an attribute in the object’s __dict__ (if present).
+			-- As outlined in Implementing Descriptors, data descriptors take preference over instance attributes, while non-data descriptors don’t.
+			--  Otherwise, an AttributeError is raised.
+		external
+			"C [macro %"Python.h%"] (PyObject*, PyObject*): EIF_POINTER"
+		alias
+			"PyObject_GenericGetAttr"
+		end
+
 	c_py_object_compare_cmp (o1, o2: POINTER): INTEGER
 			-- Compare the values of `o1' and `o2' using a routine provided by `o1',
 			-- if one exists, otherwise with a routine provided by `o2'.
@@ -1886,7 +1926,7 @@ feature {NONE} -- Externals (Object Protocol)
 		end
 
 	c_py_object_cmp, c_py_object_rich_compare (o1, o2: POINTER; opid: INTEGER): POINTER
-			--Compare the values of `o1` and `o2` using the operation specified by opid.
+			-- Compare the values of `o1` and `o2` using the operation specified by opid.
 			-- which must be one of Py_LT, Py_LE, Py_EQ, Py_NE, Py_GT, or Py_GE, corresponding to <, <=, ==, !=, >, or >= respectively.
 			-- This is the equivalent of the Python expression `o1 op o2`, where op is the operator corresponding to opid. Returns the value of the comparison on success, or NULL on failure.
 		external
@@ -1896,7 +1936,8 @@ feature {NONE} -- Externals (Object Protocol)
 		end
 
 	c_py_object_compare, c_py_object_rich_compare_bool (o1, o2: POINTER; opid: INTEGER): INTEGER
-			--Compare the values of o1 and o2 using the operation specified by opid, which must be one of Py_LT, Py_LE, Py_EQ, Py_NE, Py_GT, or Py_GE, corresponding to <, <=, ==, !=, >, or >= respectively. Returns -1 on error, 0 if the result is false, 1 otherwise. This is the equivalent of the Python expression o1 op o2, where op is the operator corresponding to opid.
+			-- Compare the values of o1 and o2 using the operation specified by opid, which must be one of Py_LT, Py_LE, Py_EQ, Py_NE, Py_GT, or Py_GE, corresponding to <, <=, ==, !=, >, or >= respectively.
+			-- Returns -1 on error, 0 if the result is false, 1 otherwise. This is the equivalent of the Python expression o1 op o2, where op is the operator corresponding to opid.
 		external
 			"C | %"Python.h%""
 		alias
@@ -1909,10 +1950,21 @@ feature {NONE} -- Externals (Object Protocol)
 			-- Returns the string representation on success, NULL on failure.
 			-- This is the equivalent of the Python expression "repr(o)".
 			-- Called by the repr() built-in function and by reverse quotes.
+			-- Changed in version 3.4: This function now includes a debug assertion to help ensure that it does not silently discard an active exception.
 		external
 			"C | %"Python.h%""
 		alias
 			"PyObject_Repr"
+		end
+
+	c_py_object_ascii (o: POINTER): POINTER
+			--Return value: New reference.
+			--As PyObject_Repr(), compute a string representation of object o, but escape the non-ASCII characters in the string returned by PyObject_Repr() with \x, \u or \U escapes.
+			-- This generates a string similar to that returned by PyObject_Repr() in Python 2. Called by the ascii() built-in function.
+		external
+			"C | %"Python.h%""
+		alias
+			"PyObject_ASCII"
 		end
 
 	c_py_object_str (o: POINTER): POINTER
@@ -1927,14 +1979,36 @@ feature {NONE} -- Externals (Object Protocol)
 			"PyObject_Str"
 		end
 
+	c_py_object_bytes (o: POINTER): POINTER
+			-- Return value: New reference.
+			-- Compute a bytes representation of object o.
+			-- NULL is returned on failure and a bytes object on success.
+			-- This is equivalent to the Python expression bytes(o), when o is not an integer.
+			-- Unlike bytes(o), a TypeError is raised when o is an integer instead of a zero-initialized bytes object.	
+		external
+			"C | %"Python.h%""
+		alias
+			"PyObject_Bytes"
+		end
+
+	c_py_object_is_subclass (o, c: POINTER): INTEGER
+			-- Return 1 if the class `o` is identical to or derived from the class `c`, otherwise return 0. In case of an error, return -1.
+			-- If `c` is a tuple, the check will be done against every entry in cls.
+			-- The result will be 1 when at least one of the checks returns 1, otherwise it will be 0.
+			-- If `c` has a __subclasscheck__() method, it will be called to determine the subclass status as described in PEP 3119. Otherwise, derived is a subclass of `c` if it is a direct or indirect subclass, i.e. contained in a.__mro__.
+			-- Normally only class objects, i.e. instances of type or a derived class, are considered classes. However, objects can override this by having a __bases__ attribute (which must be a tuple of base classes).		
+		external
+			"C | %"Python.h%""
+		alias
+			"PyObject_IsSubclass"
+		end
+
 	c_py_object_is_instance (o, c: POINTER): INTEGER
-			-- Return 1 if `o' is an instance of the class `c' or a subclass of `c'.
-			-- If `c' is a type object rather than a class object,
-			-- PyObject_IsInstance() returns 1 if `o' is of type `c'.
-			-- If `o' is not a class instance and `c' is neither a type object or class object,
-			-- `o' must have a __class__ attribute -- the class relationship of the value
-			-- of that attribute with `c' will be used to determine the result of this function.
-			-- New in version 2.1.
+			-- Return 1 if `o` is an instance of the class `c` or a subclass of `c`, or 0 if not. On error, returns -1 and sets an exception.
+			-- If `c` is a tuple, the check will be done against every entry in `c`. The result will be 1 when at least one of the checks returns 1, otherwise it will be 0.
+            -- If `c` has a __instancecheck__() method, it will be called to determine the subclass status as described in PEP 3119. Otherwise, `o` is an instance of `c` if its class is a subclass of `c`.
+			-- An instance `o` can override what is considered its class by having a __class__ attribute.
+			--  An object `c` can override if it is considered a class, and what its base classes are, by having a __bases__ attribute (which must be a tuple of base classes).
 		external
 			"C | %"Python.h%""
 		alias
@@ -1989,6 +2063,16 @@ feature {NONE} -- Externals (Object Protocol)
 			"PyObject_Hash"
 		end
 
+	c_py_object_hash_not_implemented (o: POINTER): INTEGER
+			-- Set a TypeError indicating that type(o) is not hashable and return -1.
+			-- This function receives special treatment when stored in a tp_hash slot, allowing a type to explicitly indicate to the interpreter that it is not hashable.
+		external
+			"C | %"Python.h%""
+		alias
+			"PyObject_Hash"
+		end
+
+
 	c_py_object_is_true (o: POINTER): INTEGER
 			-- Returns 1 if the object `o' is considered to be true, and 0 otherwise.
 			-- This is equivalent to the Python expression "not not o".
@@ -1997,6 +2081,15 @@ feature {NONE} -- Externals (Object Protocol)
 			"C | %"Python.h%""
 		alias
 			"PyObject_IsTrue"
+		end
+
+	c_py_object_not (o: POINTER): INTEGER
+			-- Returns 0 if the object o is considered to be true, and 1 otherwise.
+			-- This is equivalent to the Python expression not o. On failure, return -1.	
+		external
+			"C | %"Python.h%""
+		alias
+			"PyObject_Not"
 		end
 
 	c_py_object_length (o: POINTER): INTEGER
@@ -2009,6 +2102,29 @@ feature {NONE} -- Externals (Object Protocol)
 			"C | %"Python.h%""
 		alias
 			"PyObject_Length"
+		end
+
+	c_py_object_size (o: POINTER): INTEGER
+			-- Return the length of object o.
+			-- If the object o provides either the sequence and mapping protocols, the sequence length is returned.
+			--On error, -1 is returned.
+			-- This is the equivalent to the Python expression len(o).		
+		external
+			"C | %"Python.h%""
+		alias
+			"PyObject_Size"
+		end
+
+	c_py_object_length_hint (o: POINTER; a_default: INTEGER): INTEGER
+			-- Return an estimated length for the object o.
+			-- First try to return its actual length, then an estimate using __length_hint__(), and finally return the default value.
+			-- On error return -1.
+			-- This is the equivalent to the Python expression operator.length_hint(o, a_default).
+			-- New in version 3.4.
+		external
+			"C inline use <Python.h>"
+		alias
+			"return PyObject_LengthHint((PyObject *)$o, (Py_ssize_t)$a_default)"
 		end
 
 	c_py_object_get_item (o, k: POINTER): POINTER
