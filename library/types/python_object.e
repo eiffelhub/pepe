@@ -1,4 +1,4 @@
-note
+﻿note
 	description: "General Python objects"
 	author: "Daniel Rodriguez"
 	date: "$Date:$"
@@ -122,6 +122,38 @@ feature -- Access
 			Result := c_py_object_hash (py_obj_ptr)
 		end
 
+feature -- Access Special Python Attributes
+
+	dict__: PYTHON_DICTIONARY
+			-- A dictionary or other mapping object used to store an object's (writable) attributes.
+		do
+			create Result.borrowed (c_py_object_get_attribute_string (py_obj_ptr, s2p ("__dict__")))
+		end
+
+	owning_class: PYTHON_OBJECT
+			-- The class to which a class instance belongs.
+		do
+			create Result.borrowed (c_py_object_get_attribute_string (py_obj_ptr, s2p ("__class__")))
+		end
+
+	bases: PYTHON_TUPLE
+			--The tuple of base classes of a class object.
+		do
+			create Result.borrowed (c_py_object_get_attribute_string (py_obj_ptr, s2p ("__bases__")))
+		end
+
+	name__: STRING
+			-- The name of the class, function, method, descriptor, or generator instance.
+		do
+			Result := attribute_value ("__name__").str
+		end
+
+	qualified_name__: STRING
+			-- The qualified name of the class, function, method, descriptor, or generator instance.
+		do
+			Result := attribute_value ("__qualname__").str
+		end
+
 feature -- Status settings
 
 	set_attribute_value (a: STRING; v: PYTHON_OBJECT)
@@ -184,29 +216,29 @@ feature -- Status report
 		require
 			t_not_void: t /= Void
 		do
-
+			Result := c_py_object_is_instance (py_obj_ptr, t.py_obj_ptr) = 1
 		end
 
 	is_subclass_of (c: PYTHON_CLASS): BOOLEAN
-			-- Is `Current''s generating Python class a subclass ocf `c'?
+			-- Is `Current's generating Python class a subclass ocf `c'?
 		require
 			c_not_void: c /= Void
 		do
-
+			Result := c_py_object_is_subclass (py_obj_ptr, c.py_obj_ptr) = 1
 		end
 
-	is_subtype_of (t: PYTHON_TYPE)
+	is_subtype_of (t: PYTHON_TYPE): BOOLEAN
 			-- Is `Current' of type `t' or a subtype?
 		require
 			t_not_void: t /= Void
 		do
-
+			Result := c_py_object_type_check (py_obj_ptr, t.py_obj_ptr) = 1
 		end
 
 	is_callable: BOOLEAN
 			-- Is `Current' a callable object in the sense of Python?
 		do
-
+			Result := c_py_callable_check (py_obj_ptr) = 1
 		end
 
 	is_dictionary: BOOLEAN
@@ -245,12 +277,29 @@ feature -- Status report
 			Result := c_py_tuple_check (py_obj_ptr) = 1
 		end
 
+	is_none: BOOLEAN
+			-- Is `Current` a Python none object?
+			-- The Python None object, denoting lack of value.
+		do
+			if py_obj_ptr = c_py_none then
+				Result := True
+			else
+				Result := False
+			end
+		end
+
+	is_module: BOOLEAN
+			-- Is `Current`Python ojbect a module object, or a subtype of a module object?
+		do
+			Result := c_py_module_check (py_obj_ptr) = 1
+		end
+
 feature {NONE} -- Implementation
 
 	dispose
-			--
+			-- <Precursor>
 		do
-			if c_py_refcnt (py_obj_ptr) >1  then
+			if c_py_refcnt (py_obj_ptr) > 1 then
 				c_py_xdecref (py_obj_ptr)
 				py_obj_ptr := c_py_none
 			end
