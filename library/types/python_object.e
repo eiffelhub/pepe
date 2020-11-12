@@ -4,9 +4,11 @@ note
 	date: "$Date:$"
 	file: "$Workfile:$"
 	revision: "$Revision:$"
+	EIS: "name=Python Reference Count", "src=https://pythonextensionpatterns.readthedocs.io/en/latest/refcount.html", "protocol=uri"
 
 class
 	PYTHON_OBJECT
+
 inherit
 	COMPARABLE
 		select
@@ -33,7 +35,6 @@ create
 
 feature -- Initialization
 
-
 	new (py: POINTER)
 			-- Initialize `Current' as a python object owned by Eiffel.
 			-- It will be DECREF-ed by disposal
@@ -42,17 +43,19 @@ feature -- Initialization
 			p_not_null: py /= default_pointer
 		do
 			init (py)
-			decreference := True
 		end
 
 	borrowed (py: POINTER)
 			-- Initialize `Current' as a python object owned by Python.
 			-- Not need to be DEREF-ed by disposal
-			-- When no ownership is transferred, the caller is said to borrow the reference. Nothing needs to be done for a borrowed reference.	
+			-- When no ownership is transferred, the caller is said to borrow the reference. Nothing needs to be done for a borrowed reference.
+			--| The lender can invalidate the reference at any time without telling you.
+			--| Bad news. So increment a borrowed reference whilst you need it and decrement it when you are finished.
 		require
 			p_not_null: py /= default_pointer
 		do
 			init (py)
+			increase_reference_count
 		end
 
 	init (py: POINTER)
@@ -83,7 +86,7 @@ feature -- Access
 	attribute_value (a: STRING): PYTHON_OBJECT
 			-- Value of attribute named ` a'.
 		require
-			a_not_void: a/= Void
+			a_not_void: a /= Void
 			a_exists: has_attribute (a)
 		do
 			Result := borrowed_python_object (c_py_object_get_attribute_string (py_obj_ptr, s2p (a)))
@@ -153,7 +156,6 @@ feature -- Conversion
 			create Result
 		end
 
-
 feature -- Status report
 
 	decreference: BOOLEAN
@@ -173,11 +175,11 @@ feature -- Status report
 		local
 			r: INTEGER
 		do
-			r := c_py_object_compare_cmp (py_obj_ptr,other.py_obj_ptr)
+			r := c_py_object_compare_cmp (py_obj_ptr, other.py_obj_ptr)
 			Result := r < 0
 		end
 
-	is_instance_of (t:PYTHON_TYPE): BOOLEAN
+	is_instance_of (t: PYTHON_TYPE): BOOLEAN
 			-- Is `Current' a instance of Python type `t'?
 		require
 			t_not_void: t /= Void
@@ -201,7 +203,6 @@ feature -- Status report
 
 		end
 
-
 	is_callable: BOOLEAN
 			-- Is `Current' a callable object in the sense of Python?
 		do
@@ -223,7 +224,7 @@ feature -- Status report
 	is_string: BOOLEAN
 			-- Is `Current' a Python string object?
 		do
-			Result := {PY_UNICODE_OBJECT}.py_unicode_check(py_obj_ptr) = 1
+			Result := {PY_UNICODE_OBJECT}.py_unicode_check (py_obj_ptr) = 1
 		end
 
 	is_integer: BOOLEAN
@@ -249,15 +250,20 @@ feature {NONE} -- Implementation
 	dispose
 			--
 		do
-			if decreference then
-				if c_py_refcnt (py_obj_ptr) > 1 then
-					c_py_xdecref (py_obj_ptr)
-				end
+			if c_py_refcnt (py_obj_ptr) >1  then
+				c_py_xdecref (py_obj_ptr)
+				py_obj_ptr := c_py_none
 			end
+		end
+
+	increase_reference_count
+		do
+			c_py_xincref (py_obj_ptr)
 		end
 
 invariant
 	handle_set: py_obj_ptr /= default_pointer
 	right_type: py_type_ptr = c_py_object_type (py_obj_ptr)
+	reference_count: c_py_refcnt (py_obj_ptr) >= 0
 
 end -- class PYTHON_OBJECT
