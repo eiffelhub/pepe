@@ -323,6 +323,16 @@ feature -- Status report
 
 feature -- Basic routines (API)
 
+	c_py_refcnt (o: POINTER): INTEGER
+			-- This macro is used to access the ob_refcnt member of a Python object
+		require
+			not_null_object: o /= default_pointer
+		external
+			"C [macro %"Python.h%"](PyObject*): EIF_INTEGER"
+		alias
+			"Py_REFCNT"
+		end
+
 	s2p (s: STRING): POINTER
 			-- String `s' converted to a char * pointer
 		local
@@ -475,7 +485,6 @@ feature -- Basic routines (API)
 	string_type: PYTHON_TYPE
 			-- Type object representation in Eiffel of a Python string
 		once
-				--create Result.borrowed (c_py_string_type)
 			create Result.borrowed ({PY_UNICODE_OBJECT}.py_unicode_type)
 		end
 
@@ -613,8 +622,6 @@ feature {NONE} -- Externals
 			"Py_CompileString"
 		end
 
-
-
 	c_py_eval_get_builtins
 			-- Get the "__bulitins_ attribute of the current namespace
 		external
@@ -625,26 +632,25 @@ feature {NONE} -- Externals
 
 feature {NONE} -- Externals (Reference Counting)
 
-		c_py_incref (o: POINTER)
-				-- Increment the reference count for object `o`.
-				-- The object must not be NULL; if you aren’t sure that it isn’t NULL, use Py_XINCREF().			
-			require
-				not_null_object: o /= default_pointer
-			external
-				"C [macro %"Python.h%"](PyObject*)"
-			alias
-				"Py_INCREF"
-			end
+	c_py_incref (o: POINTER)
+			-- Increment the reference count for object `o`.
+			-- The object must not be NULL; if you aren’t sure that it isn’t NULL, use Py_XINCREF().
+		require
+			not_null_object: o /= default_pointer
+		external
+			"C [macro %"Python.h%"](PyObject*)"
+		alias
+			"Py_INCREF"
+		end
 
-		c_py_xincref (o: POINTER)
-				-- Increment the reference count for object o.
-				-- The object may be NULL, in which case the macro has no effect.
-			external
-				"C [macro %"Python.h%"](PyObject*)"
-			alias
-				"Py_XINCREF"
-			end
-
+	c_py_xincref (o: POINTER)
+			-- Increment the reference count for object o.
+			-- The object may be NULL, in which case the macro has no effect.
+		external
+			"C [macro %"Python.h%"](PyObject*)"
+		alias
+			"Py_XINCREF"
+		end
 
 	c_py_decref (o: POINTER)
 			-- Decrement the reference count for object `o'.
@@ -668,11 +674,22 @@ feature {NONE} -- Externals (Reference Counting)
 			"Py_DECREF"
 		end
 
+	c_py_xdecref (o: POINTER)
+			-- Decrement the reference count for object o.
+			-- The object may be NULL, in which case the macro has no effect; otherwise the effect is the same as for Py_DECREF(), and the same warning applies.
+		require
+			not_null_object: o /= default_pointer
+		external
+			"C [macro %"Python.h%"](PyObject*)"
+		alias
+			"Py_XDECREF"
+		end
+
 	c_py_clear (o: POINTER)
 			-- Decrement the reference count for object `o`.
 			-- The object may be NULL, in which case the macro has no effect; otherwise the effect is the same as for Py_DECREF(), except that the argument is also set to NULL.
 			-- The warning for Py_DECREF() does not apply with respect to the object passed because the macro carefully uses a temporary variable and sets the argument to NULL before decrementing its reference count.
-			-- It is a good idea to use this macro whenever decrementing the reference count of an object that might be traversed during garbage collection.		
+			-- It is a good idea to use this macro whenever decrementing the reference count of an object that might be traversed during garbage collection.
 		external
 			"C [macro %"Python.h%"](PyObject*)"
 		alias
@@ -680,7 +697,6 @@ feature {NONE} -- Externals (Reference Counting)
 		end
 
 feature {NONE} -- Externals (Classes)
-
 
 feature {NONE} -- Externals (Dictionary Objects)
 
@@ -1998,7 +2014,7 @@ feature {NONE} -- Externals (Object Protocol)
 			-- Compute a bytes representation of object o.
 			-- NULL is returned on failure and a bytes object on success.
 			-- This is equivalent to the Python expression bytes(o), when o is not an integer.
-			-- Unlike bytes(o), a TypeError is raised when o is an integer instead of a zero-initialized bytes object.	
+			-- Unlike bytes(o), a TypeError is raised when o is an integer instead of a zero-initialized bytes object.
 		external
 			"C | %"Python.h%""
 		alias
@@ -2010,7 +2026,7 @@ feature {NONE} -- Externals (Object Protocol)
 			-- If `c` is a tuple, the check will be done against every entry in cls.
 			-- The result will be 1 when at least one of the checks returns 1, otherwise it will be 0.
 			-- If `c` has a __subclasscheck__() method, it will be called to determine the subclass status as described in PEP 3119. Otherwise, derived is a subclass of `c` if it is a direct or indirect subclass, i.e. contained in a.__mro__.
-			-- Normally only class objects, i.e. instances of type or a derived class, are considered classes. However, objects can override this by having a __bases__ attribute (which must be a tuple of base classes).		
+			-- Normally only class objects, i.e. instances of type or a derived class, are considered classes. However, objects can override this by having a __bases__ attribute (which must be a tuple of base classes).
 		external
 			"C | %"Python.h%""
 		alias
@@ -2020,7 +2036,7 @@ feature {NONE} -- Externals (Object Protocol)
 	c_py_object_is_instance (o, c: POINTER): INTEGER
 			-- Return 1 if `o` is an instance of the class `c` or a subclass of `c`, or 0 if not. On error, returns -1 and sets an exception.
 			-- If `c` is a tuple, the check will be done against every entry in `c`. The result will be 1 when at least one of the checks returns 1, otherwise it will be 0.
-            -- If `c` has a __instancecheck__() method, it will be called to determine the subclass status as described in PEP 3119. Otherwise, `o` is an instance of `c` if its class is a subclass of `c`.
+			-- If `c` has a __instancecheck__() method, it will be called to determine the subclass status as described in PEP 3119. Otherwise, `o` is an instance of `c` if its class is a subclass of `c`.
 			-- An instance `o` can override what is considered its class by having a __class__ attribute.
 			--  An object `c` can override if it is considered a class, and what its base classes are, by having a __bases__ attribute (which must be a tuple of base classes).
 		external
@@ -2086,7 +2102,6 @@ feature {NONE} -- Externals (Object Protocol)
 			"PyObject_Hash"
 		end
 
-
 	c_py_object_is_true (o: POINTER): INTEGER
 			-- Returns 1 if the object `o' is considered to be true, and 0 otherwise.
 			-- This is equivalent to the Python expression "not not o".
@@ -2099,7 +2114,7 @@ feature {NONE} -- Externals (Object Protocol)
 
 	c_py_object_not (o: POINTER): INTEGER
 			-- Returns 0 if the object o is considered to be true, and 1 otherwise.
-			-- This is equivalent to the Python expression not o. On failure, return -1.	
+			-- This is equivalent to the Python expression not o. On failure, return -1.
 		external
 			"C | %"Python.h%""
 		alias
@@ -2122,7 +2137,7 @@ feature {NONE} -- Externals (Object Protocol)
 			-- Return the length of object o.
 			-- If the object o provides either the sequence and mapping protocols, the sequence length is returned.
 			--On error, -1 is returned.
-			-- This is the equivalent to the Python expression len(o).		
+			-- This is the equivalent to the Python expression len(o).
 		external
 			"C | %"Python.h%""
 		alias

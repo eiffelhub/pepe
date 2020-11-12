@@ -28,8 +28,8 @@ feature -- Initialization
 			a: ANY
 		do
 			a := s.to_c
---			borrowed (c_py_string_from_string ($a))
-			new ({PY_BYTES_OBJECT}.py_bytes_from_string ($a))
+			borrowed ({PY_BYTES_OBJECT}.py_bytes_from_string ($a))
+--			new ({PY_BYTES_OBJECT}.py_bytes_from_string ($a))
 		end
 
 

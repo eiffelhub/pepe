@@ -33,9 +33,11 @@ create
 
 feature -- Initialization
 
+
 	new (py: POINTER)
 			-- Initialize `Current' as a python object owned by Eiffel.
 			-- It will be DECREF-ed by disposal
+			-- When a function passes ownership of a reference on to its caller, the caller is said to receive a new reference.
 		require
 			p_not_null: py /= default_pointer
 		do
@@ -46,6 +48,7 @@ feature -- Initialization
 	borrowed (py: POINTER)
 			-- Initialize `Current' as a python object owned by Python.
 			-- Not need to be DEREF-ed by disposal
+			-- When no ownership is transferred, the caller is said to borrow the reference. Nothing needs to be done for a borrowed reference.	
 		require
 			p_not_null: py /= default_pointer
 		do
@@ -74,7 +77,7 @@ feature -- Access
 	python_type: PYTHON_TYPE
 			-- Type object
 		do
-			create Result.borrowed (py_type_ptr)
+			create Result.new (py_type_ptr)
 		end
 
 	attribute_value (a: STRING): PYTHON_OBJECT
@@ -170,7 +173,7 @@ feature -- Status report
 		local
 			r: INTEGER
 		do
-			r := c_py_object_compare_cmp (py_obj_ptr,other.py_obj_ptr) 
+			r := c_py_object_compare_cmp (py_obj_ptr,other.py_obj_ptr)
 			Result := r < 0
 		end
 
@@ -247,7 +250,9 @@ feature {NONE} -- Implementation
 			--
 		do
 			if decreference then
-				c_py_decref (py_obj_ptr)
+				if c_py_refcnt (py_obj_ptr) > 1 then
+					c_py_xdecref (py_obj_ptr)
+				end
 			end
 		end
 
