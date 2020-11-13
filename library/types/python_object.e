@@ -98,7 +98,7 @@ feature -- Access
 			o: PYTHON_STRING
 		do
 			create o.new (c_py_object_repr (py_obj_ptr))
-			Result := o.string
+			Result := o.string_8
 		end
 
 	printable_out: STRING
@@ -107,10 +107,10 @@ feature -- Access
 			o: PYTHON_STRING
 		do
 			create o.new (c_py_object_str (py_obj_ptr))
-			Result := o.string
+			Result := o.string_8
 		end
 
-	unicode_out: PYTHON_USTRING
+	unicode_out: PYTHON_STRING
 			-- Unicode string representation of `Current' as it would be called by unicodestr () in Python
 		do
 			create Result.new ({PY_UNICODE_OBJECT}.py_unicode_as_unicode (py_obj_ptr))

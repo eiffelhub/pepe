@@ -1060,15 +1060,6 @@ feature -- Accesspy_string_type: POINTER
 			]"
 		end
 
-	py_unicode_from_unicode (u: POINTER; size: INTEGER): POINTER
-		external
-			"C inline use <Python.h>"
-		alias
-			"[
-				return PyUnicode_FromUnicode ((Py_UNICODE const*)$u, (Py_ssize_t)$size);
-			]"
-		end
-
 	py_unicode_from_kind_and_data (kind: INTEGER; buffer: POINTER; size: INTEGER): POINTER
 		external
 			"C inline use <Python.h>"

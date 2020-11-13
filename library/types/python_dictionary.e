@@ -101,7 +101,7 @@ feature -- Access
 					if o.is_string and then
 						attached {PYTHON_STRING} o as l_ps
 					then
-						s := l_ps.string
+						s := l_ps.string_8
 					else
 						s := o.str.string
 					end
@@ -135,9 +135,9 @@ feature -- Conversion
 					if o.is_string and then
 						attached {PYTHON_STRING} o as l_ps
 					then
-						s := l_ps.string
+						s := l_ps.string_8
 					else
-						s := o.str.string
+						s := o.str
 					end
 					if attached item_at (o) as l_item_at then
 						Result.force (l_item_at.to_eiffel_type, create {STRING_32}.make_from_string_general (s))

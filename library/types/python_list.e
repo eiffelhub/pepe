@@ -126,7 +126,7 @@ feature -- Conversion
 					if o.is_string and then
 						attached {PYTHON_STRING} o as l_s
 					then
-						Result.force (create {STRING_32}.make_from_string_general (l_s.string))
+						Result.force (create {STRING_32}.make_from_string_general (l_s.string_8))
 					else
 						Result.force (create {STRING_32}.make_from_string_general (o.str))
 					end

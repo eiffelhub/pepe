@@ -226,7 +226,7 @@ feature -- Initialization
 				i = sz
 			loop
 				if attached {PYTHON_STRING} ks.item_at (i) AS o then
-					s := o.string
+					s := o.string_8
 					obj := g.item_at (o)
 					m ?= obj
 					if m /= Void then

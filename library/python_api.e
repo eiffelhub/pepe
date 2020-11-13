@@ -494,6 +494,57 @@ feature -- Basic routines (API)
 			create Result.borrowed_none
 		end
 
+
+feature {NONE} -- Externals comparisons.
+
+	c_py_gt: INTEGER
+			-- corresponding to <
+		external
+			"C [macro %"Python.h%"]"
+		alias
+			"Py_GT"
+		end
+
+	c_py_ge: INTEGER
+			-- corresponding to <=
+		external
+			"C [macro %"Python.h%"]"
+		alias
+			"Py_GE"
+		end
+
+	c_py_eq: INTEGER
+			-- corresponding to ==
+		external
+			"C [macro %"Python.h%"]"
+		alias
+			"Py_EQ"
+		end
+
+	c_py_ne: INTEGER
+			-- corresponding to !=
+		external
+			"C [macro %"Python.h%"]"
+		alias
+			"Py_NE"
+		end
+
+	c_py_lt: INTEGER
+			-- corresponding to >
+		external
+			"C [macro %"Python.h%"]"
+		alias
+			"Py_LT"
+		end
+
+	c_py_le: INTEGER
+			-- corresponding to >=
+		external
+			"C [macro %"Python.h%"]"
+		alias
+			"Py_LE"
+		end
+
 feature {NONE} -- Externals
 
 	c_py_eval_input: INTEGER

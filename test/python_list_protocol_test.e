@@ -44,7 +44,7 @@ feature -- Test routines
 		local
 			obj: POINTER
 			item: POINTER
-			pu: PYTHON_USTRING
+			pu: PYTHON_STRING
 		do
 			c_py_initialize
 			obj := c_py_list_new (3)
@@ -58,7 +58,7 @@ feature -- Test routines
 
 			create pu.new (item)
 			assert ("Expected Three", pu.size = 5)
-			assert ("Expected Three", pu.string.same_string ("Three"))
+			assert ("Expected Three", pu.string_32.same_string ("Three"))
 
 		end
 
