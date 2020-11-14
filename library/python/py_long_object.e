@@ -1,12 +1,13 @@
 ﻿note
 	description: "[
-			All integers are implemented as `long` integer objects of arbitrary size.
-			This subtype of PyObject represents a Python integer object.			
-			On error, most PyLong_As* APIs return (return type)-1 which cannot be distinguished from a number. Use PyErr_Occurred() to disambiguate.
+		All integers are implemented as `long` integer objects of arbitrary size.
+		This subtype of PyObject represents a Python integer object.			
+		On error, most PyLong_As* APIs return (return type)-1 which cannot be distinguished from a number. Use PyErr_Occurred() to disambiguate.
 	]"
 	date: "$Date$"
 	revision: "$Revision$"
 	EIS: "name=PyLong_Type", "src=https://docs.python.org/3/c-api/long.html?highlight=pylong_type#c.PyLong_Type"
+
 class
 	PY_LONG_OBJECT
 
@@ -21,7 +22,6 @@ feature -- Access
 			"&PyLong_Type"
 		end
 
-
 	py_long_check (o: POINTER): INTEGER
 			-- Return true if its argument is a PyLongObject or a subtype of PyLongObject.
 		external
@@ -31,7 +31,7 @@ feature -- Access
 		end
 
 	py_long_check_exact (o: POINTER): INTEGER
-			--Return true if its argument is a PyLongObject, but not a subtype of PyLongObject.		
+			--Return true if its argument is a PyLongObject, but not a subtype of PyLongObject.
 		external
 			"C [macro %"Python.h%"](PyObject *): int"
 		alias
@@ -39,9 +39,10 @@ feature -- Access
 		end
 
 	py_long_from_long (v: INTEGER_64): POINTER
+			-- Return value: New reference
 			-- Return a new PyLongObject object from v, or NULL on failure.
 			-- The current implementation keeps an array of integer objects for all integers between -5 and 256,
-			-- when you create an int in that range you actually just get back a reference to the existing object.	
+			-- when you create an int in that range you actually just get back a reference to the existing object.
 		external
 			"C inline use <Python.h>"
 		alias
@@ -51,6 +52,7 @@ feature -- Access
 		end
 
 	py_long_from_unsigned_long (v: NATURAL_64): POINTER
+			-- Return value: New reference
 			-- Return a new PyLongObject object from a C unsigned long, or NULL on failure.
 		external
 			"C inline use <Python.h>"
@@ -61,6 +63,7 @@ feature -- Access
 		end
 
 	py_long_from_size_t (v: NATURAL): POINTER
+			-- Return value: New reference
 			-- Return a new PyLongObject object from a C size_t, or NULL on failure.
 		external
 			"C inline use <Python.h>"
@@ -71,6 +74,7 @@ feature -- Access
 		end
 
 	py_long_from_ssize_t (v: INTEGER): POINTER
+			-- Return value: New reference.
 			-- Return a new PyLongObject object from a C Py_ssize_t, or NULL on failure.
 		external
 			"C inline use <Python.h>"
@@ -81,6 +85,7 @@ feature -- Access
 		end
 
 	py_long_from_double (v: REAL_64): POINTER
+			-- Return value: New reference.
 			-- Return a new PyLongObject object from the integer part of v, or NULL on failure.
 		external
 			"C inline use <Python.h>"
@@ -90,21 +95,10 @@ feature -- Access
 			]"
 		end
 
-	py_long_as_long (v: POINTER): INTEGER_64
-		do
-			Result := c_py_long_as_long (v)
-		ensure
-			instance_free: class
-		end
-
-	py_long_as_long_and_overflow (v: POINTER; overflow: TYPED_POINTER [INTEGER]): INTEGER_64
-		do
-			Result := c_py_long_as_long_and_overflow (v, overflow)
-		ensure
-			instance_free: class
-		end
-
 	py_long_as_ssize_t (v: POINTER): INTEGER
+			--Return a C Py_ssize_t representation of pylong. pylong must be an instance of PyLongObject.
+			--Raise OverflowError if the value of pylong is out of range for a Py_ssize_t.
+			--Returns -1 on error. Use PyErr_Occurred() to disambiguate.		
 		do
 			Result := c_py_long_as_ssize_t (v)
 		ensure
@@ -112,6 +106,9 @@ feature -- Access
 		end
 
 	py_long_as_size_t (v: POINTER): NATURAL
+			--Return a C size_t representation of pylong. pylong must be an instance of PyLongObject.
+			--Raise OverflowError if the value of pylong is out of range for a size_t.
+			--Returns (size_t)-1 on error. Use PyErr_Occurred() to disambiguate.
 		do
 			Result := c_py_long_as_size_t (v)
 		ensure
@@ -119,15 +116,11 @@ feature -- Access
 		end
 
 	py_long_as_unsigned_long (v: POINTER): NATURAL_64
+			-- Return a C unsigned long representation of pylong. pylong must be an instance of PyLongObject.
+			-- Raise OverflowError if the value of pylong is out of range for a unsigned long.
+			-- Returns (unsigned long)-1 on error. Use PyErr_Occurred() to disambiguate.	
 		do
 			Result := c_py_long_as_unsigned_long (v)
-		ensure
-			instance_free: class
-		end
-
-	py_long_as_unsigned_long_mask (v: POINTER): NATURAL_64
-		do
-			Result := c_py_long_as_unsigned_long_mask (v)
 		ensure
 			instance_free: class
 		end
@@ -140,6 +133,9 @@ feature -- Access
 		end
 
 	py_long_as_double (v: POINTER): REAL_64
+			-- Return a C double representation of pylong. pylong must be an instance of PyLongObject.
+			-- Raise OverflowError if the value of pylong is out of range for a double.
+			-- Returns -1.0 on error. Use PyErr_Occurred() to disambiguate.
 		do
 			Result := c_py_long_as_double (v)
 		ensure
@@ -147,6 +143,8 @@ feature -- Access
 		end
 
 	py_long_from_void_ptr (v: POINTER): POINTER
+			-- Return value: New reference.
+			-- Create a Python integer from the pointer p. The pointer value can be retrieved from the resulting value using PyLong_AsVoidPtr().	
 		do
 			Result := c_py_long_from_void_ptr (v)
 		ensure
@@ -154,6 +152,9 @@ feature -- Access
 		end
 
 	py_long_as_void_ptr (v: POINTER): POINTER
+			-- Convert a Python integer pylong to a C void pointer. If pylong cannot be converted, an OverflowError will be raised.
+			-- This is only assured to produce a usable void pointer for values created with PyLong_FromVoidPtr().
+			-- Returns NULL on error. Use PyErr_Occurred() to disambiguate.
 		do
 			Result := c_py_long_as_void_ptr (v)
 		ensure
@@ -161,6 +162,8 @@ feature -- Access
 		end
 
 	py_long_from_long_long (v: INTEGER_64): POINTER
+			--Return value: New reference.
+			--Return a new PyLongObject object from a C long long, or NULL on failure.	
 		external
 			"C inline use <Python.h>"
 		alias
@@ -170,6 +173,8 @@ feature -- Access
 		end
 
 	py_long_from_unsigned_long_long (v: NATURAL_64): POINTER
+			-- Return value: New reference.
+			-- Return a new PyLongObject object from a C unsigned long long, or NULL on failure.	
 		external
 			"C inline use <Python.h>"
 		alias
@@ -178,30 +183,12 @@ feature -- Access
 			]"
 		end
 
-	py_long_as_long_long (v: POINTER): INTEGER_64
-		do
-			Result := c_py_long_as_long_long (v)
-		ensure
-			instance_free: class
-		end
-
 	py_long_as_unsigned_long_long (v: POINTER): NATURAL_64
+			-- Return a C unsigned long long representation of pylong. pylong must be an instance of PyLongObject.
+			-- Raise OverflowError if the value of pylong is out of range for an unsigned long long.
+			-- Returns (unsigned long long)-1 on error. Use PyErr_Occurred() to disambiguate.
 		do
 			Result := c_py_long_as_unsigned_long_long (v)
-		ensure
-			instance_free: class
-		end
-
-	py_long_as_unsigned_long_long_mask (v: POINTER): NATURAL_64
-		do
-			Result := c_py_long_as_unsigned_long_long_mask (v)
-		ensure
-			instance_free: class
-		end
-
-	py_long_as_long_long_and_overflow (v: POINTER; overflow: TYPED_POINTER [INTEGER]): INTEGER_64
-		do
-			Result := c_py_long_as_long_long_and_overflow (v, overflow)
 		ensure
 			instance_free: class
 		end
@@ -212,7 +199,7 @@ feature -- Access
 			-- If base is 0, str is interpreted using the Integer literals definition; in this case, leading zeros in a non-zero decimal number raises a ValueError.
 			-- If base is not 0, it must be between 2 and 36, inclusive.
 			-- Leading spaces and single underscores after a base specifier and between digits are ignored.
-			-- If there are no digits, ValueError will be raised.		
+			-- If there are no digits, ValueError will be raised.
 		do
 			Result := c_py_long_from_string (str.area.base_address, pend, base)
 		ensure
@@ -228,24 +215,6 @@ feature -- Access
 		end
 
 feature {NONE} -- Externals
-
-	c_py_long_as_long (anonymous_1: POINTER): INTEGER_64
-		external
-			"C inline use <Python.h>"
-		alias
-			"[
-				return PyLong_AsLong ((PyObject*)$anonymous_1);
-			]"
-		end
-
-	c_py_long_as_long_and_overflow (anonymous_1: POINTER; anonymous_2: TYPED_POINTER [INTEGER]): INTEGER_64
-		external
-			"C inline use <Python.h>"
-		alias
-			"[
-				return PyLong_AsLongAndOverflow ((PyObject*)$anonymous_1, (int*)$anonymous_2);
-			]"
-		end
 
 	c_py_long_as_ssize_t (anonymous_1: POINTER): INTEGER
 		external
@@ -271,15 +240,6 @@ feature {NONE} -- Externals
 		alias
 			"[
 				return PyLong_AsUnsignedLong ((PyObject*)$anonymous_1);
-			]"
-		end
-
-	c_py_long_as_unsigned_long_mask (anonymous_1: POINTER): NATURAL_64
-		external
-			"C inline use <Python.h>"
-		alias
-			"[
-				return PyLong_AsUnsignedLongMask ((PyObject*)$anonymous_1);
 			]"
 		end
 
@@ -319,15 +279,6 @@ feature {NONE} -- Externals
 			]"
 		end
 
-	c_py_long_as_long_long (anonymous_1: POINTER): INTEGER_64
-		external
-			"C inline use <Python.h>"
-		alias
-			"[
-				return PyLong_AsLongLong ((PyObject*)$anonymous_1);
-			]"
-		end
-
 	c_py_long_as_unsigned_long_long (anonymous_1: POINTER): NATURAL_64
 		external
 			"C inline use <Python.h>"
@@ -337,23 +288,6 @@ feature {NONE} -- Externals
 			]"
 		end
 
-	c_py_long_as_unsigned_long_long_mask (anonymous_1: POINTER): NATURAL_64
-		external
-			"C inline use <Python.h>"
-		alias
-			"[
-				return PyLong_AsUnsignedLongLongMask ((PyObject*)$anonymous_1);
-			]"
-		end
-
-	c_py_long_as_long_long_and_overflow (anonymous_1: POINTER; anonymous_2: TYPED_POINTER [INTEGER]): INTEGER_64
-		external
-			"C inline use <Python.h>"
-		alias
-			"[
-				return PyLong_AsLongLongAndOverflow ((PyObject*)$anonymous_1, (int*)$anonymous_2);
-			]"
-		end
 
 	c_py_long_from_string (anonymous_1: POINTER; anonymous_2: POINTER; anonymous_3: INTEGER): POINTER
 		external

@@ -9,6 +9,7 @@ class
 
 feature -- Access
 
+
 	c_py_number_check (o: POINTER): INTEGER
 		external
 			"C inline use <Python.h>"

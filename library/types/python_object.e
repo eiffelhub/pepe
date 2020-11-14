@@ -265,6 +265,19 @@ feature -- Status report
 			Result := {PY_LONG_OBJECT}.py_long_check (py_obj_ptr) = 1
 		end
 
+	is_float: BOOLEAN
+			-- Is `Current' a Python float object?
+		do
+			Result := {PY_FLOAT_OBJECT}.py_float_check (py_obj_ptr) = 1
+		end
+
+	is_number: BOOLEAN
+			-- Is `Current' a Python number object?
+		do
+			Result := {PY_NUMBER_OBJECT}.c_py_number_check (py_obj_ptr) = 1
+		end
+
+
 	is_list: BOOLEAN
 			-- Is `Current' a Python list object?
 		do
