@@ -14,7 +14,9 @@ inherit
 			py_type_ptr,
 			item_at,
 			set_item_at,
-			to_eiffel_type
+			to_eiffel_type,
+			slice,
+			size
 		end
 
 create
@@ -58,12 +60,10 @@ feature -- Access
 			end
 		end
 
-	slice (high, low: INTEGER): detachable PYTHON_LIST
+	slice (high, low: INTEGER): PYTHON_LIST
 			-- List of the items in Current between low and high
-		require
-			valid_index: low >= 0 and low < size
 		do
-		--	st := c_py_list_get_slice (py_obj_ptr, low, high)
+			create Result.new (c_py_list_get_slice (py_obj_ptr, low, high))
 		end
 
 

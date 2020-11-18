@@ -199,7 +199,7 @@ feature -- Status report
 		require
 			a_not_void: a /= Void
 		do
-
+			Result := c_py_object_has_attribute_string (py_obj_ptr, s2p (a)) = 1
 		end
 
 	is_less alias "<" (other: PYTHON_OBJECT): BOOLEAN

@@ -16,7 +16,23 @@ inherit
 
 create
 	borrowed,
-	new
+	new,
+	from_name,
+	from_import
+
+feature {NONE} -- Initialization
+
+   from_name( a_name : STRING )
+     	 -- New module from `a_name`
+      do
+	      new (c_py_module_new (s2p (a_name)))
+      end
+
+	 from_import( a_name : STRING )
+		 -- Create a module Importing from `a_name`
+      do
+		 new (c_py_import_import_module (s2p (a_name)))
+      end
 
 feature -- Access
 

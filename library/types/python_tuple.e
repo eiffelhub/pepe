@@ -12,12 +12,22 @@ inherit
 		redefine
 			py_type_ptr,
 			item_at,
-			set_item_at
+			set_item_at,
+			size
 		end
 
 create
 	borrowed,
-	new
+	new,
+	with_capacity
+
+feature {NONE} -- Initialization
+
+	with_capacity( a_length : INTEGER )
+		 -- Creates a tuple with capacity `a_length`
+      do
+      	new (c_py_tuple_new (a_length))
+	  end
 
 feature -- Access
 

@@ -12,7 +12,8 @@ inherit
 	PYTHON_SEQUENCE
 		redefine
 			py_type_ptr,
-			to_eiffel_type
+			to_eiffel_type,
+			size
 		end
 
 create

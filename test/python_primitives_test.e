@@ -52,6 +52,7 @@ feature -- Test
 	test_numbers
 		local
 			a, b, c: PYTHON_INTEGER
+			e, f: PYTHON_FLOAT
 		do
 			create a.from_integer (2)
 			create b.from_integer (3)
@@ -60,5 +61,9 @@ feature -- Test
 			assert ("Expected 4", (c / a).integer =  4)
 			assert ("Expected 1", (c \\ a).integer =  1)
 			assert ("Expected 0", (c \\ b).integer =  0)
+
+			create e.from_real (3.35)
+			create f.from_real (5.567)
+			assert ("e + f", (e + f).real_64 = (3.35 + 5.567))
 		end
 end
