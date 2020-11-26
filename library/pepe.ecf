@@ -26,6 +26,7 @@
 				<platform excluded_value="windows"/>
 			</condition>
 		</external_include>
+		
 		<external_object location="$(PYTHON_HOME)/libs/$(PYTHON_LIB_NAME).lib">
 			<condition>
 				<platform value="windows"/>
@@ -36,6 +37,11 @@
 				<platform excluded_value="windows"/>
 			</condition>
 		</external_object>
+		<!--external_linker_flag value="`python3.9-config --cflags --ldflags`">
+			<condition>
+				<platform excluded_value="windows"/>
+			</condition>
+		</external_linker_flag>-->
 		<external_cflag value="-DPY_SSIZE_T_CLEAN"/>
 		<library name="base" location="$ISE_LIBRARY\library\base\base.ecf"/>
 		<cluster name="pepe" location=".\" recursive="true">

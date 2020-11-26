@@ -65,11 +65,11 @@ feature -- Initialization
 			l_dic: PYTHON_DICTIONARY
 		do
 			create l_dic.new_empty
-			l_dic.set_item ({PYTHON_OBJECT_FACTORY}.new_python_string ("figsize"), {PYTHON_OBJECT_FACTORY}.new_python_tuple (<<9,3>>))
+			l_dic.set_item ({PYTHON_OBJECT_FACTORY}.new_python_string ("figsize"), {PYTHON_OBJECT_FACTORY}.new_python_tuple ({ARRAY [ANY]}<<9,3>>))
 			create mp.make
 			l_names := {ARRAY [ANY]} <<"group_a", "group_b", "group_c">>
 			l_values := {ARRAY [ANY]}<< 1, 10, 100>>
-			r := mp.figure_python( {PYTHON_OBJECT_FACTORY}.new_python_tuple (<<>>), l_dic)
+			r := mp.figure_python( {PYTHON_OBJECT_FACTORY}.new_python_tuple ({ARRAY [ANY]}<<>>), l_dic)
 			r := mp.subplot_1({ARRAY [ANY]}<<131>>, create {STRING_TABLE [ANY]}.make (0))
 			r := mp.bar({ARRAY [ANY]}<<l_names, l_values>>, create {STRING_TABLE [ANY]}.make (0))
 			r := mp.subplot_1({ARRAY [ANY]} <<132>>, create {STRING_TABLE [ANY]}.make (0))

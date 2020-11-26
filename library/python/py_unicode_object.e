@@ -160,14 +160,6 @@ feature -- Accesspy_string_type: POINTER
 			]"
 		end
 
-	py_unicode_decode_mbcs (string: POINTER; length: INTEGER; errors: POINTER): POINTER
-		external
-			"C inline use <Python.h>"
-		alias
-			"[
-				return PyUnicode_DecodeMBCS ((char const*)$string, (Py_ssize_t)$length, (char const*)$errors);
-			]"
-		end
 
 	py_unicode_decode_locale_and_size (str: POINTER; len: INTEGER; errors: POINTER): POINTER
 		external
@@ -507,7 +499,7 @@ feature -- Accesspy_string_type: POINTER
 			"C inline use <Python.h>"
 		alias
 			"[
-				return PyUnicode_FromFormatV ((char const*)$format, (va_list)$vargs);
+				return PyUnicode_FromFormatV ((char const*)$format, (va_list){$vargs});
 			]"
 		end
 
@@ -745,41 +737,8 @@ feature -- Accesspy_string_type: POINTER
 			]"
 		end
 
-	py_unicode_decode_mbcsstateful (string: POINTER; length: INTEGER; errors: POINTER; consumed: POINTER): POINTER
-		external
-			"C inline use <Python.h>"
-		alias
-			"[
-				return PyUnicode_DecodeMBCSStateful ((char const*)$string, (Py_ssize_t)$length, (char const*)$errors, (Py_ssize_t*)$consumed);
-			]"
-		end
 
-	py_unicode_decode_code_page_stateful (code_page: INTEGER; string: POINTER; length: INTEGER; errors: POINTER; consumed: POINTER): POINTER
-		external
-			"C inline use <Python.h>"
-		alias
-			"[
-				return PyUnicode_DecodeCodePageStateful ((int)$code_page, (char const*)$string, (Py_ssize_t)$length, (char const*)$errors, (Py_ssize_t*)$consumed);
-			]"
-		end
 
-	py_unicode_as_mbcsstring (unicode: POINTER): POINTER
-		external
-			"C inline use <Python.h>"
-		alias
-			"[
-				return PyUnicode_AsMBCSString ((PyObject*)$unicode);
-			]"
-		end
-
-	py_unicode_encode_code_page (code_page: INTEGER; unicode: POINTER; errors: POINTER): POINTER
-		external
-			"C inline use <Python.h>"
-		alias
-			"[
-				return PyUnicode_EncodeCodePage ((int)$code_page, (PyObject*)$unicode, (char const*)$errors);
-			]"
-		end
 
 	py_unicode_encode_locale (unicode: POINTER; errors: POINTER): POINTER
 		external
@@ -1402,14 +1361,6 @@ feature -- Accesspy_string_type: POINTER
 			]"
 		end
 
-	py_unicode_encode_mbcs (data: POINTER; length: INTEGER; errors: POINTER): POINTER
-		external
-			"C inline use <Python.h>"
-		alias
-			"[
-				return PyUnicode_EncodeMBCS ((Py_UNICODE const*)$data, (Py_ssize_t)$length, (char const*)$errors);
-			]"
-		end
 
 	py_unicode_encode_decimal (s: POINTER; length: INTEGER; output: POINTER; errors: POINTER): INTEGER
 		external

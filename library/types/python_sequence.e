@@ -16,7 +16,7 @@ note
 			do
 				last_operation := - 1
 			end
-		
+
 
 	]"
 
@@ -135,7 +135,7 @@ feature -- Status report
 		local
 			r: INTEGER
 		do
-			r := c_py_sequence_contains (py_obj_ptr, o.py_obj_ptr)
+			r := {PY_SEQUENCE_OBJECT}.c_py_sequence_contains (py_obj_ptr, o.py_obj_ptr)
 			Result := r = 1
 		end
 

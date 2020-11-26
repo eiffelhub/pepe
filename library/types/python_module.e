@@ -76,7 +76,7 @@ feature -- Access
 		local
 			p: POINTER
 		do
-			p := c_py_module_get_filename (py_obj_ptr)
+			p := {PY_MODULE_OBJECT}.c_py_module_get_filename (py_obj_ptr)
 			if p /= default_pointer then
 				create Result.make_from_c (p)
 			else

@@ -765,9 +765,9 @@ feature {NONE} -- Externals (Reference Counting)
 			-- The warning for Py_DECREF() does not apply with respect to the object passed because the macro carefully uses a temporary variable and sets the argument to NULL before decrementing its reference count.
 			-- It is a good idea to use this macro whenever decrementing the reference count of an object that might be traversed during garbage collection.
 		external
-			"C [macro %"Python.h%"](PyObject*)"
+			"C inline use <Python.h>"
 		alias
-			"Py_CLEAR"
+			"//Py_CLEAR ((PyObject *) $o)"
 		end
 
 feature {NONE} -- Externals (Classes)
@@ -1841,14 +1841,6 @@ feature {NONE} -- Externals (Module)
 			"PyModule_GetName"
 		end
 
-	c_py_module_get_filename (m: POINTER): POINTER
-			-- Return the name of the file from which module was loaded using module's __file__ attribute.
-			-- If this is not defined, or if it is not a string, raise SystemError and return NULL.
-		external
-			"C | %"Python.h%""
-		alias
-			"PyModule_GetFilename"
-		end
 
 feature {NONE} -- Externals (None)
 
@@ -2005,7 +1997,7 @@ feature {NONE} -- Externals (Object Protocol)
 			"PyObject_DelAttr"
 		end
 
-	c_py_object_generic_get_attribute (o, a: POINTER): INTEGER
+	c_py_object_generic_get_attribute (o, a: POINTER): POINTER
 			-- Return value: New reference.
 			-- Generic attribute getter function that is meant to be put into a type object’s tp_getattro slot.
 			-- It looks for a descriptor in the dictionary of classes in the object’s MRO as well as an attribute in the object’s __dict__ (if present).
@@ -2343,15 +2335,15 @@ feature {NONE} -- Externals (Sequence protocol)
 			"PySequence_Size"
 		end
 
-	c_py_sequence_contains (o, value: POINTER): INTEGER
-			-- Determine if `o' contains `value'.
-			-- If an item in `o' is equal to `value', return 1, otherwise return 0.
-			-- On error, return -1. This is equivalent to the Python expression "value in o".
-		external
-			"C [macro %"Python.h%"](PyObject*,PyTypeObject*):EIF_INTEGER"
-		alias
-			"PySequence_Contains"
-		end
+--	c_py_sequence_contains (o, value: POINTER): INTEGER
+--			-- Determine if `o' contains `value'.
+--			-- If an item in `o' is equal to `value', return 1, otherwise return 0.
+--			-- On error, return -1. This is equivalent to the Python expression "value in o".
+--		external
+--			"C [macro %"Python.h%"](PyObject*,PyTypeObject*):EIF_INTEGER"
+--		alias
+--			"PySequence_Contains"
+--		end
 
 	c_py_sequence_get_item (o: POINTER; pos: INTEGER): POINTER
 			-- Return value: Borrowed reference.
