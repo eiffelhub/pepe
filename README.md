@@ -5,6 +5,9 @@ Work in progress update to Python Version 3.
 ## Python C API 
 https://docs.python.org/3/c-api/index.html
 
+## Useful Links
+https://portingguide.readthedocs.io/en/latest/core-obj-misc.html
+
 
 ## Environment Variables
 

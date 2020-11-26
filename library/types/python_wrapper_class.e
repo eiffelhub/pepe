@@ -48,5 +48,33 @@ feature
 			l_result := c_py_tuple_set_item (Result.py_obj_ptr, 0, py_obj_ptr) = 1
 		end
 
+	call_method (method_name: STRING; args: detachable PYTHON_TUPLE): PYTHON_OBJECT
+		local
+			method_object: PYTHON_OBJECT
+			call_args: PYTHON_TUPLE
+			l_args: PYTHON_TUPLE
+		do
+			method_object := method (method_name)
+			l_args := args
+			if l_args = Void then
+				create l_args.make
+			end
+			call_args := self_tuple.concat (l_args)
+			Result := method_object.call_object (call_args)
+		end
+
+	from_init (args: detachable PYTHON_TUPLE)
+			-- Initializes the object using the class object defined by
+			-- feature "class_object"
+		local
+			l_args: PYTHON_TUPLE
+		do
+			l_args := args
+			if l_args = Void then
+				create l_args.make
+			end
+			new (py_class_object.call_object (l_args).py_obj_ptr)
+		end
+
 end
 

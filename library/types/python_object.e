@@ -89,7 +89,7 @@ feature -- Access
 			a_not_void: a /= Void
 			a_exists: has_attribute (a)
 		do
-			Result := borrowed_python_object (c_py_object_get_attribute_string (py_obj_ptr, s2p (a)))
+			Result := new_python_object (c_py_object_get_attribute_string (py_obj_ptr, s2p (a)))
 		end
 
 	str: STRING
@@ -277,7 +277,6 @@ feature -- Status report
 			Result := {PY_NUMBER_OBJECT}.c_py_number_check (py_obj_ptr) = 1
 		end
 
-
 	is_list: BOOLEAN
 			-- Is `Current' a Python list object?
 		do
@@ -305,6 +304,22 @@ feature -- Status report
 			-- Is `Current`Python ojbect a module object, or a subtype of a module object?
 		do
 			Result := c_py_module_check (py_obj_ptr) = 1
+		end
+
+feature -- Callable
+
+	call_object (args: PYTHON_TUPLE): PYTHON_OBJECT
+		require
+			is_callable
+		do
+			create Result.new (c_py_object_call_object (py_obj_ptr, args.py_obj_ptr))
+		end
+
+	call_keywords (args: PYTHON_TUPLE; keywords: PYTHON_DICTIONARY): PYTHON_OBJECT
+		require
+			is_callable
+		do
+			create Result.new (c_py_object_call (py_obj_ptr, args.py_obj_ptr, keywords.py_obj_ptr))
 		end
 
 feature {NONE} -- Implementation

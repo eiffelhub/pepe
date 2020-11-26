@@ -19,10 +19,20 @@ inherit
 create
 	borrowed,
 	new,
+	from_string,
 	from_string_8,
 	from_string_32
 
 feature {NONE} -- Initialization
+
+	from_string (s: READABLE_STRING_GENERAL)
+		do
+			if s.is_string_32 then
+				from_string_32 (s.to_string_32)
+			else
+				from_string_8 (s.to_string_8)
+			end
+		end
 
 	from_string_8 (s: STRING_8)
 			-- Create `Current' from `s'

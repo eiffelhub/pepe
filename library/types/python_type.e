@@ -69,6 +69,12 @@ feature -- Status report
 			Result := py_obj_ptr = integer_type.py_obj_ptr
 		end
 
+	is_float_type: BOOLEAN
+			-- Is Current an float type?
+		do
+			Result := py_obj_ptr = float_type.py_obj_ptr
+		end
+
 	is_boolean_type: BOOLEAN
 			-- Is Current a boolean type?
 		do

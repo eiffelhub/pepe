@@ -160,20 +160,25 @@ feature -- Status report
 			Result := r /= default_pointer
 		end
 
-	has_string (key: STRING): BOOLEAN
+	has_string (key: READABLE_STRING_GENERAL): BOOLEAN
 			-- Is string `kay' in `keys'?
 		require
 			key_not_void: key /= Void
 		local
 			r: POINTER
 		do
-			r := c_py_dict_get_item_string (py_obj_ptr, s2p (key))
+			if key.is_string_32 then
+				r := c_py_dict_get_item_string (py_obj_ptr, string_32_to_pointer (key.to_string_32))
+			else
+				r := c_py_dict_get_item_string (py_obj_ptr, s2p (key.to_string_8))
+			end
+			c_py_incref (r)
 			Result :=  r /= default_pointer
 		end
 
 feature -- Status setting
 
-	set_string_item (s: STRING; o: PYTHON_OBJECT)
+	set_string_item (s: READABLE_STRING_GENERAL; o: PYTHON_OBJECT)
 			-- Set item `o' with key `s'.
 		require
 			s_not_void: s /= Void
@@ -181,7 +186,11 @@ feature -- Status setting
 		local
 			r: INTEGER
 		do
-			r := c_py_dict_set_item_string (py_obj_ptr, s2p (s), o.py_obj_ptr)
+			if s.is_string_32 then
+				r := c_py_dict_set_item_string (py_obj_ptr, string_32_to_pointer (s.to_string_32), o.py_obj_ptr)
+			else
+				r := c_py_dict_set_item_string (py_obj_ptr, s2p (s.to_string_8), o.py_obj_ptr)
+			end
 		ensure
 			exists: has_string (s)
 		end
@@ -208,7 +217,7 @@ feature -- Status setting
 		do
 			r := c_py_dict_set_item (py_obj_ptr, k.py_obj_ptr, o.py_obj_ptr)
 		ensure
-			exists: has (o)
+			exists: has (k)
 		end
 
 invariant

@@ -16,14 +16,41 @@ feature -- Initialization
 
 	make
 			-- Creation procedure.
+		local
+			npt: MATPLOTLIB_PYPLOT_TEST
 		do
-				--| Add your code here
-				test_run_error
-				test_run_program_string -- Raise segfault at program exit.
-				test_run_program_file
-				test_evaluate_expression
-				test_import
-				test_inspect_variables
+			--test_smtp_lib
+				--			test_run_error
+				--			test_run_program_string -- Raise segfault at program exit.
+				--			test_run_program_file
+				--			test_evaluate_expression
+				--			test_import
+				--			test_inspect_variables
+			create npt.make
+		end
+
+	test_smtp_lib
+		local
+			py: PYTHON_INTERPRETER
+			r: PYTHON_OBJECT
+			smtp: SMTPLIB_SMTP
+			message: STRING
+		do
+			create py.initialize
+			message := "[
+					From: From Person <from@fromdomain.com>
+					To: To Person <to@todomain.com>
+					Subject: SMTP e-mail test
+					
+					This is a test e-mail message.
+				]"
+
+			create smtp.from_init (Void)
+			r := smtp.set_debuglevel (<<True>>)
+			r := smtp.connect ({ARRAY [ANY]} <<>>)
+			r := smtp.sendmail ({ARRAY [ANY]} <<"from@fromdomain.com", "to@todomain.com", message>>)
+			r := smtp.quit ()
+			py.finalize
 		end
 
 	test_run_error
@@ -122,21 +149,21 @@ feature -- Initialization
 				print ("Type: " + d.python_type.str + "%N")
 				print ("Dictionary: " + d.printable_out + "%N")
 			end
---			print ("--------------- List -------------------------%N")
---			print ("Evaluate: " + data_list + "%N")
---			if attached py.evaluate_expression (data_list) as d then
---				print ("Type: " + d.python_type.str + "%N")
---				print ("List: " + d.printable_out + "%N")
---				print ("--------------- syntax error -------------------------%N")
---			end
---			if attached py.evaluate_expression (data_syntax_error) as d then
---				print ("Should not occur")
---				py.finalize
---				raise ("Should not occur")
---			end
---			if attached py.last_exception as exec then
---				print ("Exception: " + exec + "%N")
---			end
+				--			print ("--------------- List -------------------------%N")
+				--			print ("Evaluate: " + data_list + "%N")
+				--			if attached py.evaluate_expression (data_list) as d then
+				--				print ("Type: " + d.python_type.str + "%N")
+				--				print ("List: " + d.printable_out + "%N")
+				--				print ("--------------- syntax error -------------------------%N")
+				--			end
+				--			if attached py.evaluate_expression (data_syntax_error) as d then
+				--				print ("Should not occur")
+				--				py.finalize
+				--				raise ("Should not occur")
+				--			end
+				--			if attached py.last_exception as exec then
+				--				print ("Exception: " + exec + "%N")
+				--			end
 			py.finalize
 		end
 

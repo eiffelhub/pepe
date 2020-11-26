@@ -22,17 +22,27 @@ create
 
 feature {NONE} -- Initialization
 
-   from_name( a_name : STRING )
-     	 -- New module from `a_name`
-      do
-	      new (c_py_module_new (s2p (a_name)))
-      end
+	max_retries: INTEGER = 5
 
-	 from_import( a_name : STRING )
-		 -- Create a module Importing from `a_name`
-      do
-		 new (c_py_import_import_module (s2p (a_name)))
-      end
+	from_name (a_name: STRING)
+			-- New module from `a_name`
+		do
+			new (c_py_module_new (s2p (a_name)))
+		end
+
+	from_import (a_name: STRING)
+			-- Create a module Importing from `a_name`
+		local
+			current_retries: INTEGER
+		do
+			new (c_py_import_import_module (string_8_to_pointer (a_name)))
+		rescue
+		 	 if current_retries < max_retries then
+               {EXECUTION_ENVIRONMENT}.sleep (5000)
+                current_retries := current_retries + 1
+                retry
+            end
+        end
 
 feature -- Access
 
@@ -67,7 +77,7 @@ feature -- Access
 			p: POINTER
 		do
 			p := c_py_module_get_filename (py_obj_ptr)
-			if  p /= default_pointer then
+			if p /= default_pointer then
 				create Result.make_from_c (p)
 			else
 				raise (py_system_error)

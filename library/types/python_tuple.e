@@ -17,17 +17,26 @@ inherit
 		end
 
 create
+	make,
 	borrowed,
 	new,
 	with_capacity
 
 feature {NONE} -- Initialization
 
-	with_capacity( a_length : INTEGER )
-		 -- Creates a tuple with capacity `a_length`
-      do
-      	new (c_py_tuple_new (a_length))
-	  end
+	make
+			-- Create an empty tuple
+		do
+			with_capacity (0)
+		end
+
+	with_capacity (a_length: INTEGER)
+			-- Creates a tuple with capacity `a_length`
+		do
+			new (c_py_tuple_new (a_length))
+		ensure
+			size = a_length
+		end
 
 feature -- Access
 

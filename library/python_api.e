@@ -342,6 +342,19 @@ feature -- Basic routines (API)
 			Result := ptr ($a)
 		end
 
+	string_8_to_pointer (s: STRING_8): POINTER
+			-- String `s' converted to a char * pointer
+		do
+			Result := (create {C_STRING}.make (s)).item
+		end
+
+	string_32_to_pointer (s: STRING_32): POINTER
+			-- String `s' converted to a char * pointer
+		do
+			Result := (create {NATIVE_STRING}.make (s)).item
+		end
+
+
 	ptr (p: POINTER): POINTER
 			-- Return a pointer.
 		do
@@ -387,6 +400,8 @@ feature -- Basic routines (API)
 				create {PYTHON_MODULE} Result.new (o)
 			elseif otype.is_integer_type then
 				create {PYTHON_INTEGER} Result.new (o)
+			elseif otype.is_float_type then
+				create {PYTHON_FLOAT} Result.new (o)
 			elseif otype.is_boolean_type then
 				create {PYTHON_BOOLEAN} Result.new (o)
 			elseif otype.is_none_type then
@@ -405,6 +420,8 @@ feature -- Basic routines (API)
 			otype := type_of_object_ptr (o)
 			if otype.is_integer_type then
 				create {PYTHON_INTEGER} Result.borrowed (o)
+			elseif otype.is_float_type then
+				create {PYTHON_FLOAT} Result.borrowed (o)
 			elseif otype.is_module_type then
 				create {PYTHON_MODULE} Result.borrowed (o)
 			elseif otype.is_class_type then
@@ -450,6 +467,12 @@ feature -- Basic routines (API)
 			-- Type object representation in Eiffel of a Python integer
 		once
 			create Result.borrowed ({PY_LONG_OBJECT}.py_long_type)
+		end
+
+	float_type: PYTHON_TYPE
+			-- Type object representation in Eiffel of a Python integer
+		once
+			create Result.borrowed ({PY_FLOAT_OBJECT}.py_float_type)
 		end
 
 	boolean_type: PYTHON_TYPE
@@ -2096,6 +2119,20 @@ feature {NONE} -- Externals (Object Protocol)
 			"PyObject_IsInstance"
 		end
 
+
+
+	c_py_object_call (o, a, k: POINTER): POINTER
+			-- Return value: New reference.
+			-- Call a callable Python object callable, with arguments given by the tuple args, and named arguments given by the dictionary kwargs.
+			-- args must not be NULL; use an empty tuple if no arguments are needed. If no named arguments are needed, kwargs can be NULL.
+			-- Return the result of the call on success, or raise an exception and return NULL on failure.
+			-- This is the equivalent of the Python expression: callable(*args, **kwargs).
+		external
+			"C | %"Python.h%""
+		alias
+			"PyObject_Call"
+		end
+
 	c_py_object_call_object (o, a: POINTER): POINTER
 			-- Return value: New reference.
 			-- Call a callable Python object `o', with arguments given by the tuple `a'.
@@ -2483,7 +2520,7 @@ feature {NONE} -- Externals (Tuple Objects)
 		external
 			"C | %"Python.h%""
 		alias
-			"PyList_Size"
+			"PyTuple_Size"
 		end
 
 	c_py_tuple_get_item (o: POINTER; pos: INTEGER): POINTER
