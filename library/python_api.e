@@ -328,11 +328,9 @@ feature -- Basic routines (API)
 		require
 			not_null_object: o /= default_pointer
 		external
-			"C inline use <Python.h>"
+			"C signature (PyObject*): int use <Python.h>"
 		alias
-			"[
-				Py_REFCNT((PyObject*) $o)
-			]"
+			"Py_REFCNT"
 		end
 
 	s2p (s: STRING): POINTER
@@ -602,26 +600,26 @@ feature {NONE} -- Externals
 	c_py_initialize
 			-- Initialize the interpreter.
 		external
-			"C inline use <Python.h>"
+			"C signature () use <Python.h>"
 		alias
-			"Py_Initialize()"
+			"Py_Initialize"
 		end
 
 	c_py_is_initialized: INTEGER
 			-- Is the interpreter initialized?.
 		external
-			"C inline use <Python.h>"
+			"C signature () use <Python.h>"
 		alias
-			"Py_IsInitialized()"
+			"Py_IsInitialized"
 		end
 
 	c_py_finalize
 			-- Undo all initializations made by c_py_initialize
 			-- see c_py_finalize_ex
 		external
-			"C inline use <Python.h>"
+			"C signature () use <Python.h>"
 		alias
-			"Py_Finalize()"
+			"Py_Finalize"
 		end
 
 	c_py_finalize_ex
@@ -638,9 +636,9 @@ feature {NONE} -- Externals
 			-- Some extensions may not work properly if their initialization routine is called more than once; this can happen if an application calls Py_Initialize() and Py_FinalizeEx() more than once.
 			--  Raises an auditing event cpython._PySys_ClearAuditHooks with no arguments.
 		external
-			"C inline use <Python.h>"
+			"C signature () use <Python.h>"
 		alias
-			"Py_FinalizeEx()"
+			"Py_FinalizeEx"
 		end
 
 	c_py_run_simple_string (p: POINTER): INTEGER
@@ -649,18 +647,18 @@ feature {NONE} -- Externals
 			-- Returns 0 on success or -1 if an exception was raised.
 			-- If there was an error, there is no way to get the exception information.
 		external
-			"C inline use <Python.h>"
+			"C signature (const char *): int use <Python.h>"
 		alias
-			"PyRun_SimpleString($p)"
+			"PyRun_SimpleString"
 		end
 
 	c_py_run_simple_file (fp, fn: POINTER): INTEGER
 			-- Similar to PyRun_SimpleString(), but the Python source code is read from `fp' instead of an in-memory string.
 			-- `fn' should be the name of the file.
 		external
-			"C inline use <Python.h>"
+			"C signature (FILE *, const char *): int use <Python.h>"
 		alias
-			"PyRun_SimpleFile($fp, $fn)"
+			"PyRun_SimpleFile"
 		end
 
 	c_py_run_string (str: POINTER; start: INTEGER; globals, locals: POINTER): POINTER
@@ -670,9 +668,9 @@ feature {NONE} -- Externals
 			-- Returns the result of executing the code as a Python object,
 			-- or NULL if an exception was raised.
 		external
-			"C inline use <Python.h>"
+			"C signature (const char *, int , PyObject *, PyObject *): PyObject* use <Python.h>"
 		alias
-			"PyRun_String($str, $start, $globals, $locals)"
+			"PyRun_String"
 		end
 
 	c_py_run_file (fp, fn: POINTER; start: INTEGER; globals, locals: POINTER): POINTER
@@ -680,9 +678,9 @@ feature {NONE} -- Externals
 			-- Similar to PyRun_String(), but the Python source code is read from `fp' instead of an in-memory string.
 			-- `fn' should be the name of the file.
 		external
-			"C inline use <Python.h>"
+			"C signature (FILE *, const char *, int , PyObject *, PyObject *): PyObject* use <Python.h>"
 		alias
-			"PyRun_File ($fp, $fn, $start, $globals, $locals)"
+			"PyRun_File"
 		end
 
 	c_py_compile_string (str, fn: POINTER; start: INTEGER): POINTER
@@ -808,7 +806,7 @@ feature {NONE} -- Externals (Dictionary Objects)
 		external
 			"C inline use <Python.h>"
 		alias
-			"PyDict_Clear($o)"
+			"PyDict_Clear((PyObject*) $o)"
 		end
 
 	c_py_dict_copy (o: POINTER): POINTER
@@ -817,7 +815,7 @@ feature {NONE} -- Externals (Dictionary Objects)
 		external
 			"C inline use <Python.h>"
 		alias
-			"PyDict_Copy($o)"
+			"PyDict_Copy((PyObject*) $o)"
 		end
 
 	c_py_dict_set_item (o, k, v: POINTER): INTEGER
@@ -827,7 +825,7 @@ feature {NONE} -- Externals (Dictionary Objects)
 		external
 			"C inline use <Python.h>"
 		alias
-			"PyDict_SetItem($o, $k, $v)"
+			"PyDict_SetItem((PyObject*) $o, $k, $v)"
 		end
 
 	c_py_dict_set_item_string (o, k, v: POINTER): INTEGER
@@ -838,7 +836,7 @@ feature {NONE} -- Externals (Dictionary Objects)
 		external
 			"C inline use <Python.h>"
 		alias
-			"PyDict_SetItemString($o, $k, $v)"
+			"PyDict_SetItemString((PyObject*) $o, $k, $v)"
 		end
 
 	c_py_dict_del_item (o, k: POINTER): INTEGER
@@ -847,7 +845,7 @@ feature {NONE} -- Externals (Dictionary Objects)
 		external
 			"C inline use <Python.h>"
 		alias
-			"PyDict_DelItem($o, $k)"
+			"PyDict_DelItem((PyObject*) $o, $k)"
 		end
 
 	c_py_dict_del_item_string (o, k: POINTER): INTEGER
@@ -856,7 +854,7 @@ feature {NONE} -- Externals (Dictionary Objects)
 		external
 			"C inline use <Python.h>"
 		alias
-			"PyDict_DelItemString($o, $k)"
+			"PyDict_DelItemString((PyObject*) $o, $k)"
 		end
 
 	c_py_dict_get_item (o, k: POINTER): POINTER
@@ -866,7 +864,7 @@ feature {NONE} -- Externals (Dictionary Objects)
 		external
 			"C inline use <Python.h>"
 		alias
-			"PyDict_GetItem($o, $k)"
+			"PyDict_GetItem((PyObject*) $o, $k)"
 		end
 
 	c_py_dict_get_item_string (o, k: POINTER): POINTER
@@ -875,7 +873,7 @@ feature {NONE} -- Externals (Dictionary Objects)
 		external
 			"C inline use <Python.h>"
 		alias
-			"PyDict_GetItemString($o, $k)"
+			"PyDict_GetItemString((PyObject*) $o, $k)"
 		end
 
 	c_py_dict_items (o: POINTER): POINTER
@@ -885,7 +883,7 @@ feature {NONE} -- Externals (Dictionary Objects)
 		external
 			"C inline use <Python.h>"
 		alias
-			"PyDict_Items($o)"
+			"PyDict_Items((PyObject*) $o)"
 		end
 
 	c_py_dict_keys (o: POINTER): POINTER
@@ -895,7 +893,7 @@ feature {NONE} -- Externals (Dictionary Objects)
 		external
 			"C inline use <Python.h>"
 		alias
-			"PyDict_Keys($o)"
+			"PyDict_Keys((PyObject*) $o)"
 		end
 
 	c_py_dict_values (o: POINTER): POINTER
@@ -905,16 +903,16 @@ feature {NONE} -- Externals (Dictionary Objects)
 		external
 			"C inline use <Python.h>"
 		alias
-			"PyDict_Values($o)"
+			"PyDict_Values((PyObject*) $o)"
 		end
 
-	c_py_dict_Size (o: POINTER): INTEGER
+	c_py_dict_size (o: POINTER): INTEGER
 			-- Returns the number of items in the dictionary.
 			-- This is equivalent to "len(p)" on a dictionary.
 		external
 			"C inline use <Python.h>"
 		alias
-			"PyDict_Size($o)"
+			"PyDict_Size((PyObject*) $o)"
 		end
 
 feature {NONE} -- Externals (Error)
@@ -1864,18 +1862,18 @@ feature {NONE} -- Externals (Object Protocol)
 			-- On failure, raises SystemError and returns NULL.
 			-- This is equivalent to the Python expression type(o)
 		external
-			"C inline use <Python.h>"
+			"C signature (PyObject *): PyObject* use <Python.h>"
 		alias
-			"PyObject_Type((PyObject*) $o)"
+			"PyObject_Type"
 		end
 
 	c_py_object_type_check (o, t: POINTER): INTEGER
 			-- Return 1 if the object `o' is of type `t' or a subtype of `t'.
 			-- Both parameters must be non-NULL. New in version 2.2.
 		external
-			"C inline use <Python.h>"
+			"C signature (PyObject *, PyTypeObject *): int* use <Python.h>"
 		alias
-			"PyObject_TypeCheck((PyObject*) $o, (PyTypeObject*)$t)"
+			"PyObject_TypeCheck"
 		end
 
 	c_py_object_print (o, fp: POINTER; flags: INTEGER): INTEGER
@@ -1884,9 +1882,9 @@ feature {NONE} -- Externals (Object Protocol)
 			-- The only option currently supported is Py_PRINT_RAW;
 			-- if given, the str() of the object is written instead of the repr().
 		external
-			"C inline use <Python.h>"
+			"C signature (PyObject *, FILE *, int): int use <Python.h>"
 		alias
-			"PyObject_Print((PyObject*) $o, $fp, $flags)"
+			"PyObject_Print"
 		end
 
 	c_py_object_has_attribute_string (o, a: POINTER): INTEGER
@@ -1894,9 +1892,9 @@ feature {NONE} -- Externals (Object Protocol)
 			-- This is equivalent to the Python expression "hasattr(o, attr_name)".
 			-- This function always succeeds.
 		external
-			"C inline use <Python.h>"
+			"C signature (PyObject *, const char *): int use <Python.h>"
 		alias
-			"PyObject_HasAttrString((PyObject*) $o, $a)"
+			"PyObject_HasAttrString"
 		end
 
 	c_py_object_get_attribute_string (o, a: POINTER): POINTER
