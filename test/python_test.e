@@ -46,10 +46,10 @@ feature -- Initialization
 				]"
 
 			create smtp.from_init (Void)
-			r := smtp.set_debuglevel (<<True>>)
+			r := smtp.set_debuglevel ({ARRAY [ANY]} <<True>>)
 			r := smtp.connect ({ARRAY [ANY]} <<>>)
 			r := smtp.sendmail ({ARRAY [ANY]} <<"from@fromdomain.com", "to@todomain.com", message>>)
-			r := smtp.quit ()
+			r := smtp.quit
 			py.finalize
 		end
 
@@ -237,7 +237,6 @@ feature -- Initialization
 			--
 		local
 			g: PYTHON_DICTIONARY
-			m: PYTHON_MODULE
 			ks: PYTHON_LIST
 			sz, i: INTEGER
 			s: STRING
@@ -255,8 +254,7 @@ feature -- Initialization
 				if attached {PYTHON_STRING} ks.item_at (i) AS o then
 					s := o.string_8
 					obj := g.item_at (o)
-					m ?= obj
-					if m /= Void then
+					if attached {PYTHON_MODULE} obj as m then
 						print (s + ":  " + m.str.string + "%N")
 							--      print ("__doc__: " + m.documentation)
 					else

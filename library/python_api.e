@@ -328,7 +328,7 @@ feature -- Basic routines (API)
 		require
 			not_null_object: o /= default_pointer
 		external
-			"C [macro %"Python.h%"](PyObject*): EIF_INTEGER"
+			"C signature (PyObject*): int use <Python.h>"
 		alias
 			"Py_REFCNT"
 		end
@@ -523,7 +523,7 @@ feature {NONE} -- Externals comparisons.
 	c_py_gt: INTEGER
 			-- corresponding to <
 		external
-			"C [macro %"Python.h%"]"
+			"C inline use <Python.h>"
 		alias
 			"Py_GT"
 		end
@@ -531,7 +531,7 @@ feature {NONE} -- Externals comparisons.
 	c_py_ge: INTEGER
 			-- corresponding to <=
 		external
-			"C [macro %"Python.h%"]"
+			"C inline use <Python.h>"
 		alias
 			"Py_GE"
 		end
@@ -539,7 +539,7 @@ feature {NONE} -- Externals comparisons.
 	c_py_eq: INTEGER
 			-- corresponding to ==
 		external
-			"C [macro %"Python.h%"]"
+			"C inline use <Python.h>"
 		alias
 			"Py_EQ"
 		end
@@ -547,7 +547,7 @@ feature {NONE} -- Externals comparisons.
 	c_py_ne: INTEGER
 			-- corresponding to !=
 		external
-			"C [macro %"Python.h%"]"
+			"C inline use <Python.h>"
 		alias
 			"Py_NE"
 		end
@@ -555,7 +555,7 @@ feature {NONE} -- Externals comparisons.
 	c_py_lt: INTEGER
 			-- corresponding to >
 		external
-			"C [macro %"Python.h%"]"
+			"C inline use <Python.h>"
 		alias
 			"Py_LT"
 		end
@@ -563,7 +563,7 @@ feature {NONE} -- Externals comparisons.
 	c_py_le: INTEGER
 			-- corresponding to >=
 		external
-			"C [macro %"Python.h%"]"
+			"C inline use <Python.h>"
 		alias
 			"Py_LE"
 		end
@@ -574,7 +574,7 @@ feature {NONE} -- Externals
 			-- Start symbol for interpreting isolated expressions.
 			-- When using Py_eval_input, the input string must contain a single expression and its result is returned.
 		external
-			"C [macro %"Python.h%"]"
+			"C inline use <Python.h>"
 		alias
 			"Py_eval_input"
 		end
@@ -583,7 +583,7 @@ feature {NONE} -- Externals
 			-- Start symbol for interpreting sequences of statements.
 			-- When using Py_file_input, the string can contain an abitrary number of statements and None is returned.
 		external
-			"C [macro %"Python.h%"]"
+			"C inline use <Python.h>"
 		alias
 			"Py_file_input"
 		end
@@ -592,7 +592,7 @@ feature {NONE} -- Externals
 			-- Start symbol for interpreting a single statement.
 			-- Py_single_input works in the same way as Py_file_input but only accepts a single statement.
 		external
-			"C [macro %"Python.h%"]"
+			"C inline use <Python.h>"
 		alias
 			"Py_single_input"
 		end
@@ -600,7 +600,7 @@ feature {NONE} -- Externals
 	c_py_initialize
 			-- Initialize the interpreter.
 		external
-			"C | %"Python.h%""
+			"C signature () use <Python.h>"
 		alias
 			"Py_Initialize"
 		end
@@ -608,7 +608,7 @@ feature {NONE} -- Externals
 	c_py_is_initialized: INTEGER
 			-- Is the interpreter initialized?.
 		external
-			"C | %"Python.h%""
+			"C signature () use <Python.h>"
 		alias
 			"Py_IsInitialized"
 		end
@@ -617,7 +617,7 @@ feature {NONE} -- Externals
 			-- Undo all initializations made by c_py_initialize
 			-- see c_py_finalize_ex
 		external
-			"C | %"Python.h%""
+			"C signature () use <Python.h>"
 		alias
 			"Py_Finalize"
 		end
@@ -636,7 +636,7 @@ feature {NONE} -- Externals
 			-- Some extensions may not work properly if their initialization routine is called more than once; this can happen if an application calls Py_Initialize() and Py_FinalizeEx() more than once.
 			--  Raises an auditing event cpython._PySys_ClearAuditHooks with no arguments.
 		external
-			"C | %"Python.h%""
+			"C signature () use <Python.h>"
 		alias
 			"Py_FinalizeEx"
 		end
@@ -647,7 +647,7 @@ feature {NONE} -- Externals
 			-- Returns 0 on success or -1 if an exception was raised.
 			-- If there was an error, there is no way to get the exception information.
 		external
-			"C | %"Python.h%""
+			"C signature (const char *): int use <Python.h>"
 		alias
 			"PyRun_SimpleString"
 		end
@@ -656,7 +656,7 @@ feature {NONE} -- Externals
 			-- Similar to PyRun_SimpleString(), but the Python source code is read from `fp' instead of an in-memory string.
 			-- `fn' should be the name of the file.
 		external
-			"C | %"Python.h%""
+			"C signature (FILE *, const char *): int use <Python.h>"
 		alias
 			"PyRun_SimpleFile"
 		end
@@ -668,7 +668,7 @@ feature {NONE} -- Externals
 			-- Returns the result of executing the code as a Python object,
 			-- or NULL if an exception was raised.
 		external
-			"C | %"Python.h%""
+			"C signature (const char *, int , PyObject *, PyObject *): PyObject* use <Python.h>"
 		alias
 			"PyRun_String"
 		end
@@ -678,7 +678,7 @@ feature {NONE} -- Externals
 			-- Similar to PyRun_String(), but the Python source code is read from `fp' instead of an in-memory string.
 			-- `fn' should be the name of the file.
 		external
-			"C | %"Python.h%""
+			"C signature (FILE *, const char *, int , PyObject *, PyObject *): PyObject* use <Python.h>"
 		alias
 			"PyRun_File"
 		end
@@ -691,17 +691,17 @@ feature {NONE} -- Externals
 			-- The filename specified by `fn' is used to construct the code object and may appear in tracebacks or SyntaxError exception messages.
 			-- This returns NULL if the code cannot be parsed or compiled.
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"Py_CompileString"
+			"Py_CompileString ($str, $fn, $start)"
 		end
 
 	c_py_eval_get_builtins
 			-- Get the "__bulitins_ attribute of the current namespace
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyEval_GetBuiltins"
+			"PyEval_GetBuiltins()"
 		end
 
 feature {NONE} -- Externals (Reference Counting)
@@ -712,18 +712,18 @@ feature {NONE} -- Externals (Reference Counting)
 		require
 			not_null_object: o /= default_pointer
 		external
-			"C [macro %"Python.h%"](PyObject*)"
+			"C inline use <Python.h>"
 		alias
-			"Py_INCREF"
+			"Py_INCREF((PyObject*) $o)"
 		end
 
 	c_py_xincref (o: POINTER)
 			-- Increment the reference count for object o.
 			-- The object may be NULL, in which case the macro has no effect.
 		external
-			"C [macro %"Python.h%"](PyObject*)"
+			"C inline use <Python.h>"
 		alias
-			"Py_XINCREF"
+			"Py_XINCREF((PyObject*) $o)"
 		end
 
 	c_py_decref (o: POINTER)
@@ -743,9 +743,9 @@ feature {NONE} -- Externals (Reference Counting)
 		require
 			not_null_object: o /= default_pointer
 		external
-			"C [macro %"Python.h%"](PyObject*)"
+			"C inline use <Python.h>"
 		alias
-			"Py_DECREF"
+			"Py_DECREF((PyObject*) $o)"
 		end
 
 	c_py_xdecref (o: POINTER)
@@ -754,9 +754,9 @@ feature {NONE} -- Externals (Reference Counting)
 		require
 			not_null_object: o /= default_pointer
 		external
-			"C [macro %"Python.h%"](PyObject*)"
+			"C inline use <Python.h>"
 		alias
-			"Py_XDECREF"
+			"Py_XDECREF((PyObject*) $o)"
 		end
 
 	c_py_clear (o: POINTER)
@@ -764,6 +764,7 @@ feature {NONE} -- Externals (Reference Counting)
 			-- The object may be NULL, in which case the macro has no effect; otherwise the effect is the same as for Py_DECREF(), except that the argument is also set to NULL.
 			-- The warning for Py_DECREF() does not apply with respect to the object passed because the macro carefully uses a temporary variable and sets the argument to NULL before decrementing its reference count.
 			-- It is a good idea to use this macro whenever decrementing the reference count of an object that might be traversed during garbage collection.
+			-- FIXME: why is it commented?
 		external
 			"C inline use <Python.h>"
 		alias
@@ -778,7 +779,7 @@ feature {NONE} -- Externals (Dictionary Objects)
 			-- This instance of PyTypeObject represents the Python dictionary type.
 			-- This is exposed to Python programs as types.DictType and types.DictionaryType.
 		external
-			"C [macro %"Python.h%"]"
+			"C inline use <Python.h>"
 		alias
 			"&PyDict_Type"
 		end
@@ -786,35 +787,35 @@ feature {NONE} -- Externals (Dictionary Objects)
 	c_py_dict_check (p: POINTER): INTEGER
 			-- Returns 1 if its argument is a PyDictObject.
 		external
-			"C [macro %"Python.h%"](PyObject *): int"
+			"C inline use <Python.h>"
 		alias
-			"PyDict_Check"
+			"PyDict_Check((PyObject*) $p)"
 		end
 
 	c_py_dict_new: POINTER
 			-- Return value: New reference.
 			-- Returns a new empty dictionary, or NULL on failure.
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyDict_New"
+			"PyDict_New()"
 		end
 
 	c_py_dict_clear (o: POINTER)
 			--     Empties an existing dictionary of all key-value pairs.
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyDict_Clear"
+			"PyDict_Clear((PyObject*) $o)"
 		end
 
 	c_py_dict_copy (o: POINTER): POINTER
 			-- Return value: New reference.
 			-- Returns a new dictionary that contains the same key-value pairs as `o'. New in version 1.6.
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyDict_Copy"
+			"PyDict_Copy((PyObject*) $o)"
 		end
 
 	c_py_dict_set_item (o, k, v: POINTER): INTEGER
@@ -822,9 +823,9 @@ feature {NONE} -- Externals (Dictionary Objects)
 			--`k' must be hashable; if it isn't, TypeError will be raised.
 			-- Returns 0 on success or -1 on failure.
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyDict_SetItem"
+			"PyDict_SetItem((PyObject*) $o, $k, $v)"
 		end
 
 	c_py_dict_set_item_string (o, k, v: POINTER): INTEGER
@@ -833,27 +834,27 @@ feature {NONE} -- Externals (Dictionary Objects)
 			-- The key object is created using PyString_FromString(key).
 			-- Returns 0 on success or -1 on failure.
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyDict_SetItemString"
+			"PyDict_SetItemString((PyObject*) $o, $k, $v)"
 		end
 
 	c_py_dict_del_item (o, k: POINTER): INTEGER
 			-- Removes the entry in dictionary `o' with key `k'.
 			-- `k' must be hashable; if it isn't, TypeError is raised.
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyDict_DelItem"
+			"PyDict_DelItem((PyObject*) $o, $k)"
 		end
 
 	c_py_dict_del_item_string (o, k: POINTER): INTEGER
 			-- Removes the entry in dictionary `o' which has a key specified by the string `k'.
 			-- Returns 0 on success or -1 on failure.
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyDict_DelItemString"
+			"PyDict_DelItemString((PyObject*) $o, $k)"
 		end
 
 	c_py_dict_get_item (o, k: POINTER): POINTER
@@ -861,18 +862,18 @@ feature {NONE} -- Externals (Dictionary Objects)
 			-- Returns the object from dictionary `o' which has a key `k'.
 			-- Returns NULL if the key `k' is not present, but without setting an exception.
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyDict_GetItem"
+			"PyDict_GetItem((PyObject*) $o, $k)"
 		end
 
 	c_py_dict_get_item_string (o, k: POINTER): POINTER
 			-- Return value:  Borrowed reference.
 			-- This is the same as PyDict_GetItem(), but `k' is specified as a char*, rather than a PyObject*.
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyDict_GetItemString"
+			"PyDict_GetItemString((PyObject*) $o, $k)"
 		end
 
 	c_py_dict_items (o: POINTER): POINTER
@@ -880,9 +881,9 @@ feature {NONE} -- Externals (Dictionary Objects)
 			-- Returns a PyListObject containing all the items from the dictionary,
 			-- as in the dictinoary method items() (see the Python Library Reference).
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyDict_Items"
+			"PyDict_Items((PyObject*) $o)"
 		end
 
 	c_py_dict_keys (o: POINTER): POINTER
@@ -890,9 +891,9 @@ feature {NONE} -- Externals (Dictionary Objects)
 			-- Returns a PyListObject containing all the keys from the dictionary,
 			-- as in the dictionary method keys() (see the Python Library Reference).
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyDict_Keys"
+			"PyDict_Keys((PyObject*) $o)"
 		end
 
 	c_py_dict_values (o: POINTER): POINTER
@@ -900,18 +901,18 @@ feature {NONE} -- Externals (Dictionary Objects)
 			-- Returns a PyListObject containing all the values from the dictionary p,
 			-- as in the dictionary method values() (see the Python Library Reference).
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyDict_Values"
+			"PyDict_Values((PyObject*) $o)"
 		end
 
-	c_py_dict_Size (o: POINTER): INTEGER
+	c_py_dict_size (o: POINTER): INTEGER
 			-- Returns the number of items in the dictionary.
 			-- This is equivalent to "len(p)" on a dictionary.
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyDict_Size"
+			"PyDict_Size((PyObject*) $o)"
 		end
 
 feature {NONE} -- Externals (Error)
@@ -919,345 +920,345 @@ feature {NONE} -- Externals (Error)
 	c_py_exc_generator_exit: POINTER
 			--
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_GeneratorExit"
+			"(PyObject*)PyExc_GeneratorExit"
 		end
 
 	c_py_exc_exception: POINTER
 			--
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_Exception"
+			"(PyObject*)PyExc_Exception"
 		end
 
 	c_py_exc_lookup_error: POINTER
 			--
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_LookupError"
+			"(PyObject*)PyExc_LookupError"
 		end
 
 	c_py_exc_arithmetic_error: POINTER
 			--
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_ArithmeticError"
+			"(PyObject*)PyExc_ArithmeticError"
 		end
 
 	c_py_exc_assertion_error: POINTER
 			--
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_AssertionError"
+			"(PyObject*)PyExc_AssertionError"
 		end
 
 	c_py_exc_attribute_error: POINTER
 			--
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_AttributeError"
+			"(PyObject*)PyExc_AttributeError"
 		end
 
 	c_py_exc_eof_error: POINTER
 			--
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_EOFError"
+			"(PyObject*)PyExc_EOFError"
 		end
 
 	c_py_exc_environment_error: POINTER
 			--
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_EnvironmentError"
+			"(PyObject*)PyExc_EnvironmentError"
 		end
 
 	c_py_exc_floating_point_error: POINTER
 			--
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_FloatingPointError"
+			"(PyObject*)PyExc_FloatingPointError"
 		end
 
 	c_py_exc_indentation_error: POINTER
 			--
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_IndentationError"
+			"(PyObject*)PyExc_IndentationError"
 		end
 
 	c_py_exc_import_error: POINTER
 			--
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_ImportError"
+			"(PyObject*)PyExc_ImportError"
 		end
 
 	c_py_exc_index_error: POINTER
 			--
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_IndexError"
+			"(PyObject*)PyExc_IndexError"
 		end
 
 	c_py_exc_io_error: POINTER
 			--
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_IOError"
+			"(PyObject*)PyExc_IOError"
 		end
 
 	c_py_exc_key_error: POINTER
 			--
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_KeyError"
+			"(PyObject*)PyExc_KeyError"
 		end
 
 	c_py_exc_keyboard_interrupt: POINTER
 			--
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_KeyboardInterrupt"
+			"(PyObject*)PyExc_KeyboardInterrupt"
 		end
 
 	c_py_exc_memory_error: POINTER
 			--
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_MemoryError"
+			"(PyObject*)PyExc_MemoryError"
 		end
 
 	c_py_exc_name_error: POINTER
 			--
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_NameError"
+			"(PyObject*)PyExc_NameError"
 		end
 
 	c_py_exc_not_implemented_error: POINTER
 			--
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_NotImplementedError"
+			"(PyObject*)PyExc_NotImplementedError"
 		end
 
 	c_py_exc_os_error: POINTER
 			--
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_OSError"
+			"(PyObject*)PyExc_OSError"
 		end
 
 	c_py_exc_overflow_error: POINTER
 			--
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_OverflowError"
+			"(PyObject*)PyExc_OverflowError"
 		end
 
 	c_py_exc_reference_error: POINTER
 			--
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_ReferenceError"
+			"(PyObject*)PyExc_ReferenceError"
 		end
 
 	c_py_exc_runtime_error: POINTER
 			--
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_RuntimeError"
+			"(PyObject*)PyExc_RuntimeError"
 		end
 
 	c_py_exc_stop_iteration: POINTER
 			--
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_StopIteration"
+			"(PyObject*)PyExc_StopIteration"
 		end
 
 	c_py_exc_syntax_error: POINTER
 			--
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_SyntaxError"
+			"(PyObject*)PyExc_SyntaxError"
 		end
 
 	c_py_exc_system_error: POINTER
 			--
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_SystemError"
+			"(PyObject*)PyExc_SystemError"
 		end
 
 	c_py_exc_system_exit: POINTER
 			--
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_SystemExit"
+			"(PyObject*)PyExc_SystemExit"
 		end
 
 	c_py_exc_type_error: POINTER
 			--
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_TypeError"
+			"(PyObject*)PyExc_TypeError"
 		end
 
 	c_py_exc_tab_error: POINTER
 			--
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_TabError"
+			"(PyObject*)PyExc_TabError"
 		end
 
 	c_py_exc_unbound_local_error: POINTER
 			--
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_UnboundLocalError"
+			"(PyObject*)PyExc_UnboundLocalError"
 		end
 
 	c_py_exc_unicode_error: POINTER
 			--
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_UnicodeError"
+			"(PyObject*)PyExc_UnicodeError"
 		end
 
 	c_py_exc_unicode_encode_error: POINTER
 			--
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_UnicodeEncodeError"
+			"(PyObject*)PyExc_UnicodeEncodeError"
 		end
 
 	c_py_exc_unicode_decode_error: POINTER
 			--
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_UnicodeDecodeError"
+			"(PyObject*)PyExc_UnicodeDecodeError"
 		end
 
 	c_py_exc_unicode_translate_error: POINTER
 			--
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_UnicodeTranslateError"
+			"(PyObject*)PyExc_UnicodeTranslateError"
 		end
 
 	c_py_exc_value_error: POINTER
 			--
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_ValueError"
+			"(PyObject*)PyExc_ValueError"
 		end
 
 	c_py_exc_warning: POINTER
 			--
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_Warning"
+			"(PyObject*)PyExc_Warning"
 		end
 
 	c_py_exc_user_warning: POINTER
 			--
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_UserWarning"
+			"(PyObject*)PyExc_UserWarning"
 		end
 
 	c_py_exc_deprecation_warning: POINTER
 			--
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_DeprecationWarning"
+			"(PyObject*)PyExc_DeprecationWarning"
 		end
 
 	c_py_exc_pending_deprecation_warning: POINTER
 			--
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_PendingDeprecationWarning"
+			"(PyObject*)PyExc_PendingDeprecationWarning"
 		end
 
 	c_py_exc_syntax_warning: POINTER
 			--
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_SyntaxWarning"
+			"(PyObject*)PyExc_SyntaxWarning"
 		end
 
 		--	c_py_exc_overflow_warning: POINTER is
 		--			--
 		--		external
-		--			"C [macro %"Python.h%"]:PyObject *"
+		--			"C inline use <Python.h>"
 		--		alias
-		--			"PyExc_OverflowWarning"
+		--			"(PyObject*)PyExc_OverflowWarning"
 		--		end
 
 	c_py_exc_runtime_warning: POINTER
 			--
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_RuntimeWarning"
+			"(PyObject*)PyExc_RuntimeWarning"
 		end
 
 	c_py_exc_future_warning: POINTER
 			--
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_FutureWarning"
+			"(PyObject*)PyExc_FutureWarning"
 		end
 
 		--	c_py_exc_windows_error is
 		--			--
 		--		external
-		--			"C [macro %"Python.h%"]"
+		--			"C inline use <Python.h>"
 		--		alias
-		--			"PyExc_WindowsError"
+		--			"(PyObject*)PyExc_WindowsError"
 		--		end
 
 		--	Py_windows_error: STRING is "Py_windows_error"
@@ -1266,114 +1267,114 @@ feature {NONE} -- Externals (Error)
 	c_py_exc_zero_division_error: POINTER
 			--
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_ZeroDivisionError"
+			"(PyObject*)PyExc_ZeroDivisionError"
 		end
 
 	c_py_exc_stop_async_iteration: POINTER
 			-- Must be raised by __anext__() method of an asynchronous iterator object to stop the iteration.
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_StopAsyncIteration"
+			"(PyObject*)PyExc_StopAsyncIteration"
 		end
 
 	c_py_exc_buffer_error: POINTER
 			-- Raised when a buffer related operation cannot be performed.
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_BufferError"
+			"(PyObject*)PyExc_BufferError"
 		end
 
 	c_py_exc_module_not_found_error: POINTER
 			-- Raised when a buffer related operation cannot be performed.
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_ModuleNotFoundError"
+			"(PyObject*)PyExc_ModuleNotFoundError"
 		end
 
 	c_py_exc_blocking_io_error: POINTER
 			-- Raised when an operation would block on an object (e.g. socket) set for non-blocking operation.
 			-- Corresponds to errno EAGAIN, EALREADY, EWOULDBLOCK and EINPROGRESS.
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_BlockingIOError"
+			"(PyObject*)PyExc_BlockingIOError"
 		end
 
 	c_py_exc_child_process_error: POINTER
 			-- Raised when an operation on a child process failed.
 			-- Corresponds to errno ECHILD.
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_ChildProcessError"
+			"(PyObject*)PyExc_ChildProcessError"
 		end
 
 	c_py_exc_connection_error: POINTER
 			-- A base class for connection-related issues.
 			-- Subclasses are BrokenPipeError, ConnectionAbortedError, ConnectionRefusedError and ConnectionResetError.
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_ConnectionError"
+			"(PyObject*)PyExc_ConnectionError"
 		end
 
 	c_py_exc_connection_aborted_error: POINTER
 			-- A subclass of ConnectionError, raised when a connection attempt is aborted by the peer.
 			-- Corresponds to errno ECONNABORTED.
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_ConnectionAbortedError"
+			"(PyObject*)PyExc_ConnectionAbortedError"
 		end
 
 	c_py_exc_connection_refused_error: POINTER
 			-- A subclass of ConnectionError, raised when a connection attempt is refused by the peer.
 			-- Corresponds to errno ECONNREFUSED.
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_ConnectionRefusedError"
+			"(PyObject*)PyExc_ConnectionRefusedError"
 		end
 
 	c_py_exc_connection_reset_error: POINTER
 			-- A subclass of ConnectionError, raised when a connection is reset by the peer.
 			-- Corresponds to errno ECONNRESET.
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_ConnectionResetError"
+			"(PyObject*)PyExc_ConnectionResetError"
 		end
 
 	c_py_exc_broken_pipe_error: POINTER
 			-- A subclass of ConnectionError, raised when trying to write on a pipe while the other end has been closed, or trying to write on a socket which has been shutdown for writing.
 			-- Corresponds to errno EPIPE and ESHUTDOWN.
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_BrokenPipeError"
+			"(PyObject*)PyExc_BrokenPipeError"
 		end
 
 	c_py_exc_file_exists_error: POINTER
 			-- Raised when trying to create a file or directory which already exists.
 			-- Corresponds to errno EEXIST.
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_FileExistsError"
+			"(PyObject*)PyExc_FileExistsError"
 		end
 
 	c_py_exc_file_not_found_error: POINTER
 			-- Raised when a file or directory is requested but doesn’t exist.
 			--Corresponds to errno ENOENT.
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_FileNotFoundError"
+			"(PyObject*)PyExc_FileNotFoundError"
 		end
 
 	c_py_exc_interrupted_error: POINTER
@@ -1381,97 +1382,97 @@ feature {NONE} -- Externals (Error)
 			-- Changed in version 3.5: Python now retries system calls when a syscall is interrupted by a signal,
 			-- except if the signal handler raises an exception (see PEP 475 for the rationale), instead of raising InterruptedError.
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_InterruptedError"
+			"(PyObject*)PyExc_InterruptedError"
 		end
 
 	c_py_exc_is_a_directory_error: POINTER
 			-- Raised when a file operation (such as os.remove()) is requested on a directory.
 			-- Corresponds to errno EISDIR.
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_IsADirectoryError"
+			"(PyObject*)PyExc_IsADirectoryError"
 		end
 
 	c_py_exc_not_a_directory_error: POINTER
 			-- Raised when a directory operation (such as os.listdir()) is requested on something which is not a directory.
 			-- Corresponds to errno ENOTDIR.
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_NotADirectoryError"
+			"(PyObject*)PyExc_NotADirectoryError"
 		end
 
 	c_py_exc_permission_error: POINTER
 			-- Raised when trying to run an operation without the adequate access rights - for example filesystem permissions.
 			-- Corresponds to errno EACCES and EPERM.
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_PermissionError"
+			"(PyObject*)PyExc_PermissionError"
 		end
 
 	c_py_exc_process_lookup_error: POINTER
 			-- Raised when a given process doesn’t exist.
 			-- Corresponds to errno ESRCH.
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_ProcessLookupError"
+			"(PyObject*)PyExc_ProcessLookupError"
 		end
 
 	c_py_exc_timeout_error: POINTER
 			-- Raised when a system function timed out at the system level.
 			-- Corresponds to errno ETIMEDOUT.
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_TimeoutError"
+			"(PyObject*)PyExc_TimeoutError"
 		end
 
 	c_py_exc_recursion_error: POINTER
 			-- This exception is derived from RuntimeError.
 			-- It is raised when the interpreter detects that the maximum recursion depth (see sys.getrecursionlimit()) is exceeded.
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_RecursionError"
+			"(PyObject*)PyExc_RecursionError"
 		end
 
 	c_py_exc_import_warning: POINTER
 			-- Base class for warnings about probable mistakes in module imports.
 			-- Ignored by the default warning filters. Enabling the Python Development Mode shows this warning.
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_ImportWarning"
+			"(PyObject*)PyExc_ImportWarning"
 		end
 
 	c_py_exc_unicode_warning: POINTER
 			-- Base class for warnings related to Unicode.
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_UnicodeWarning"
+			"(PyObject*)PyExc_UnicodeWarning"
 		end
 
 	c_py_exc_bytes_warning: POINTER
 			-- Base class for warnings related to bytes and bytearray.
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyExc_BytesWarning"
+			"(PyObject*)PyExc_BytesWarning"
 		end
 
 	c_py_err_resource_warning: POINTER
 			-- Base class for warnings related to resource usage.
 			-- Ignored by the default warning filters. Enabling the Python Development Mode shows this warning.
 		external
-			"C [macro %"Python.h%"]:PyObject *"
+			"C inline use <Python.h>"
 		alias
-			"PyErr_ResourceWarning"
+			"(PyObject*)PyErr_ResourceWarning"
 		end
 
 	c_py_err_occurred: POINTER
@@ -1484,18 +1485,18 @@ feature {NONE} -- Externals (Error)
 			-- (The comparison could easily fail since the exception may be an instance instead of a class,
 			-- in the case of a class exception, or it may the a subclass of the expected exception.)
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyErr_Occurred"
+			"PyErr_Occurred()"
 		end
 
 	c_py_err_print
 			-- Print a standard traceback to sys.stderr and clear the error indicator.
 			--Call this function only when the error indicator is set. (Otherwise it will cause a fatal error!)
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyErr_Print"
+			"PyErr_Print()"
 		end
 
 	c_py_err_exception_matches (exc: POINTER): INTEGER
@@ -1503,9 +1504,9 @@ feature {NONE} -- Externals (Error)
 			-- This should only be called when an exception is actually set;
 			-- a memory access violation will occur if no exception has been raised.
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyErr_ExceptionMatches"
+			"PyErr_ExceptionMatches((PyObject*) $exc)"
 		end
 
 	c_py_err_given_exception_matches (given, exc: POINTER): INTEGER
@@ -1514,17 +1515,17 @@ feature {NONE} -- Externals (Error)
 			-- If exc is a tuple, all exceptions in the tuple (and recursively in subtuples) are searched for a match.
 			-- If given is NULL, a memory access violation will occur.
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyErr_GivenExceptionMatches"
+			"PyErr_GivenExceptionMatches((PyObject*) $given, (PyObject*) $exc)"
 		end
 
 	c_py_err_clear
 			-- Clear the error indicator. If the error indicator is not set, there is no effect.
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyErr_Clear"
+			"PyErr_Clear()"
 		end
 
 feature {NONE} -- Externals (Import)
@@ -1541,9 +1542,9 @@ feature {NONE} -- Externals (Import)
 			-- Return a new reference to the imported module, or NULL with an exception set on failure
 			-- (the module may still be created in this case -- examine sys.modules to find out).
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyImport_ImportModule"
+			"PyImport_ImportModule($name)"
 		end
 
 	c_py_import_import_module_ex (name, globals, locals, fromlist: POINTER): POINTER
@@ -1551,9 +1552,9 @@ feature {NONE} -- Externals (Import)
 			-- Import a module.
 			-- This is best described by referring to the built-in Python function __import__()  as the standard __import__() function calls this function directly.
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyImport_ImportModuleEx"
+			"PyImport_ImportModuleEx($name, $globals, $locals, $fromlist)"
 		end
 
 	c_py_import_import (name: POINTER): POINTER
@@ -1562,9 +1563,9 @@ feature {NONE} -- Externals (Import)
 			-- It invokes the __import__() function from the __builtins__ of the current globals.
 			-- This means that the import is done using whatever import hooks are installed in the current environment, e.g. by rexec  or ihooks
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyImport_Import"
+			"PyImport_Import($name)"
 		end
 
 	c_py_import_reload_module (name: POINTER): POINTER
@@ -1574,9 +1575,9 @@ feature {NONE} -- Externals (Import)
 			-- as the standard reload() function calls this function directly.
 			-- Return a new reference to the reloaded module, or NULL with an exception set on failure (the module still exists in this case).
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyImport_ReloadModule"
+			"PyImport_ReloadModule($name)"
 		end
 
 	c_py_import_add_module (name: POINTER): POINTER
@@ -1588,9 +1589,9 @@ feature {NONE} -- Externals (Import)
 			-- Note: This function does not load or import the module; if the module wasn't already loaded, you will get an empty module object.
 			-- Use PyImport_ImportModule() or one of its variants to import a module. Package structures implied by a dotted name for name are not created if not already present.
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyImport_AddModule"
+			"PyImport_AddModule($name)"
 		end
 
 	c_py_import_get_module_dict: POINTER
@@ -1598,9 +1599,9 @@ feature {NONE} -- Externals (Import)
 			-- Return the dictionary used for the module administration (a.k.a. sys.modules).
 			-- Note that this is a per-interpreter variable.
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyImport_GetModuleDict"
+			"PyImport_GetModuleDict()"
 		end
 
 feature {NONE} -- Externals (Boolean)
@@ -1608,7 +1609,7 @@ feature {NONE} -- Externals (Boolean)
 	c_py_bool_type: POINTER
 			-- This instance of PyTypeObject represents the Python boolean type.
 		external
-			"C [macro %"Python.h%"]"
+			"C inline use <Python.h>"
 		alias
 			"&PyBool_Type"
 		end
@@ -1616,9 +1617,9 @@ feature {NONE} -- Externals (Boolean)
 	c_py_bool_check (o: POINTER): INTEGER
 			-- Return true if o is of type PyBool_Type. New in version 2.3.
 		external
-			"C [macro %"Python.h%"](PyObject *): int"
+			"C inline use <Python.h>"
 		alias
-			"PyBool_Check"
+			"PyBool_Check((PyObject*)$o)"
 		end
 
 	c_py_bool_from_long (i: INTEGER): POINTER
@@ -1626,9 +1627,9 @@ feature {NONE} -- Externals (Boolean)
 			-- depending on the truth value of v. New in version
 			-- 2.3.
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyBool_FromLong"
+			"PyBool_FromLong($i)"
 		end
 
 	c_py_false: POINTER
@@ -1636,7 +1637,7 @@ feature {NONE} -- Externals (Boolean)
 			-- methods. It needs to be treated just like any other
 			-- object with respect to reference counts.
 		external
-			"C [macro %"Python.h%"]"
+			"C inline use <Python.h>"
 		alias
 			"Py_False"
 		end
@@ -1646,7 +1647,7 @@ feature {NONE} -- Externals (Boolean)
 			-- methods. It needs to be treated just like any other
 			-- object with respect to reference counts.
 		external
-			"C [macro %"Python.h%"]"
+			"C inline use <Python.h>"
 		alias
 			"Py_True"
 		end
@@ -1657,7 +1658,7 @@ feature {NONE} -- Externals (List Objects)
 			-- This instance of PyTypeObject represents the Python list type.
 			-- This is the same object as types.ListType.
 		external
-			"C [macro %"Python.h%"]"
+			"C inline use <Python.h>"
 		alias
 			"&PyList_Type"
 		end
@@ -1665,27 +1666,27 @@ feature {NONE} -- Externals (List Objects)
 	c_py_list_check (o: POINTER): INTEGER
 			-- Returns true if its argument is a PyListObject.
 		external
-			"C [macro %"Python.h%"](PyObject *): int"
+			"C inline use <Python.h>"
 		alias
-			"PyList_Check"
+			"PyList_Check((PyObject*) $o)"
 		end
 
 	c_py_list_new (l: INTEGER): POINTER
 			-- Return value: New reference.
 			-- Returns a new list of length len on success, or NULL on failure.
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyList_New"
+			"PyList_New($l)"
 		end
 
 	c_py_list_size (o: POINTER): INTEGER
 			-- Returns the length of the list object in list;
 			-- this is equivalent to "len(list)" on a list object.
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyList_Size"
+			"PyList_Size((PyObject*) $o)"
 		end
 
 	c_py_list_get_item (o: POINTER; pos: INTEGER): POINTER
@@ -1693,9 +1694,9 @@ feature {NONE} -- Externals (List Objects)
 			-- Returns the object at position `pos' in the list pointed to by `o'.
 			-- If `pos' is out of bounds, returns NULL and sets an IndexError exception.
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyList_GetItem"
+			"PyList_GetItem((PyObject*) $o, $pos)"
 		end
 
 	c_py_list_set_item (o: POINTER; pos: INTEGER; i: POINTER): INTEGER
@@ -1704,9 +1705,9 @@ feature {NONE} -- Externals (List Objects)
 			-- Note: This function ``steals'' a reference to item
 			-- and discards a reference to an item already in the list at the affected position.
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyList_SetItem"
+			"PyList_SetItem((PyObject*) $o, $pos, $i)"
 		end
 
 	c_py_list_insert (o: POINTER; pos: INTEGER; i: POINTER): INTEGER
@@ -1714,9 +1715,9 @@ feature {NONE} -- Externals (List Objects)
 			-- Returns 0 if successful; returns -1 and raises an exception if unsuccessful.
 			-- Analogous to o.insert(pos, i).
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyList_Insert"
+			"PyList_Insert((PyObject*) $o, $pos, $i)"
 		end
 
 	c_py_list_append (o, i: POINTER): INTEGER
@@ -1724,9 +1725,9 @@ feature {NONE} -- Externals (List Objects)
 			-- Returns 0 if successful; returns -1 and sets an exception if unsuccessful.
 			-- Analogous to o.append(i).
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyList_Append"
+			"PyList_Append((PyObject*) $o, $i)"
 		end
 
 	c_py_list_get_slice (o: POINTER; low, high: INTEGER): POINTER
@@ -1735,9 +1736,9 @@ feature {NONE} -- Externals (List Objects)
 			-- Returns NULL and sets an exception if unsuccessful.
 			-- Analogous to o[low:high].
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyList_GetSlice"
+			"PyList_GetSlice((PyObject*) $o, $low, $high)"
 		end
 
 	c_py_list_set_slice (o: POINTER; low, high: INTEGER; i: POINTER): INTEGER
@@ -1745,9 +1746,9 @@ feature {NONE} -- Externals (List Objects)
 			-- Analogous to o[low:high] = i.
 			-- Returns 0 on success, -1 on failure.
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyList_SetSlice"
+			"PyList_SetSlice((PyObject*) $o, $low, $high, $i)"
 		end
 
 	c_py_list_sort (o: POINTER): INTEGER
@@ -1755,9 +1756,9 @@ feature {NONE} -- Externals (List Objects)
 			-- Returns 0 on success, -1 on failure.
 			-- This is equivalent to "o.sort()".
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyList_Sort"
+			"PyList_Sort((PyObject*) $o)"
 		end
 
 	c_py_list_reverse (o: POINTER): INTEGER
@@ -1765,9 +1766,9 @@ feature {NONE} -- Externals (List Objects)
 			-- Returns 0 on success, -1 on failure.
 			-- This is the equivalent of "o.reverse()".
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyList_Reverse"
+			"PyList_Reverse((PyObject*) $o)"
 		end
 
 	c_py_list_as_tuple (o: POINTER): POINTER
@@ -1775,9 +1776,9 @@ feature {NONE} -- Externals (List Objects)
 			-- Returns a new tuple object containing the contents of list `o';
 			-- equivalent to "tuple(o)".
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyList_AsTuple"
+			"PyList_AsTuple((PyObject*) $o)"
 		end
 
 feature {NONE} -- Externals (Module)
@@ -1786,7 +1787,7 @@ feature {NONE} -- Externals (Module)
 			-- This instance of PyTypeObject represents the Python module type.
 			-- This is exposed to Python programs as types.ModuleType.
 		external
-			"C [macro %"Python.h%"]"
+			"C inline use <Python.h>"
 		alias
 			"&PyModule_Type"
 		end
@@ -1796,18 +1797,18 @@ feature {NONE} -- Externals (Module)
 			-- Changed in version 2.2: Allowed subtypes to be accepted.
 
 		external
-			"C [macro %"Python.h%"] (PyObject *): int"
+			"C inline use <Python.h>"
 		alias
-			"PyModule_Check"
+			"PyModule_Check((PyObject*) $o)"
 		end
 
 	c_py_module_check_exact (o: POINTER): INTEGER
 			-- Returns true if `o' is a module object, but not a subtype of PyModule_Type.
 			-- New in version 2.2.
 		external
-			"C [macro %"Python.h%"] (PyObject *): int"
+			"C inline use <Python.h>"
 		alias
-			"PyModule_CheckExact"
+			"PyModule_CheckExact((PyObject*) $o)"
 		end
 
 	c_py_module_new (name: POINTER): POINTER
@@ -1816,9 +1817,9 @@ feature {NONE} -- Externals (Module)
 			-- Only the module's __doc__ and __name__ attributes are filled in;
 			-- the caller is responsible for providing a __file__ attribute.
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyModule_New"
+			"PyModule_New($name)"
 		end
 
 	c_py_module_get_dict (m: POINTER): POINTER
@@ -1827,18 +1828,18 @@ feature {NONE} -- Externals (Module)
 			-- this object is the same as the __dict__ attribute of the module object.
 			-- This function never fails.
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyModule_GetDict"
+			"PyModule_GetDict($m)"
 		end
 
 	c_py_module_get_name (m: POINTER): POINTER
 			-- Return module's __name__ value.
 			-- If the module does not provide one, or if it is not a string, SystemError is raised and NULL is returned.
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyModule_GetName"
+			"PyModule_GetName($m)"
 		end
 
 
@@ -1848,7 +1849,7 @@ feature {NONE} -- Externals (None)
 			-- The Python None object, denoting lack of value. This object has no methods.
 			-- It needs to be treated just like any other object with respect to reference counts.
 		external
-			"C [macro %"Python.h%"]"
+			"C inline use <Python.h>"
 		alias
 			"Py_None"
 		end
@@ -1861,7 +1862,7 @@ feature {NONE} -- Externals (Object Protocol)
 			-- On failure, raises SystemError and returns NULL.
 			-- This is equivalent to the Python expression type(o)
 		external
-			"C | %"Python.h%""
+			"C signature (PyObject *): PyObject* use <Python.h>"
 		alias
 			"PyObject_Type"
 		end
@@ -1870,7 +1871,7 @@ feature {NONE} -- Externals (Object Protocol)
 			-- Return 1 if the object `o' is of type `t' or a subtype of `t'.
 			-- Both parameters must be non-NULL. New in version 2.2.
 		external
-			"C [macro %"Python.h%"](PyObject*,PyTypeObject*):EIF_INTEGER"
+			"C signature (PyObject *, PyTypeObject *): int* use <Python.h>"
 		alias
 			"PyObject_TypeCheck"
 		end
@@ -1881,7 +1882,7 @@ feature {NONE} -- Externals (Object Protocol)
 			-- The only option currently supported is Py_PRINT_RAW;
 			-- if given, the str() of the object is written instead of the repr().
 		external
-			"C | %"Python.h%""
+			"C signature (PyObject *, FILE *, int): int use <Python.h>"
 		alias
 			"PyObject_Print"
 		end
@@ -1891,7 +1892,7 @@ feature {NONE} -- Externals (Object Protocol)
 			-- This is equivalent to the Python expression "hasattr(o, attr_name)".
 			-- This function always succeeds.
 		external
-			"C | %"Python.h%""
+			"C signature (PyObject *, const char *): int use <Python.h>"
 		alias
 			"PyObject_HasAttrString"
 		end
@@ -1902,9 +1903,9 @@ feature {NONE} -- Externals (Object Protocol)
 			-- Returns the attribute value on success, or NULL on failure.
 			-- This is the equivalent of the Python expression "o.a".
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyObject_GetAttrString"
+			"PyObject_GetAttrString((PyObject*) $o, $a)"
 		end
 
 	c_py_object_set_attribute_string (o, a, v: POINTER): INTEGER
@@ -1913,9 +1914,9 @@ feature {NONE} -- Externals (Object Protocol)
 			-- This is the equivalent of the Python statement "o.a = v".
 
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyObject_SetAttrString"
+			"PyObject_SetAttrString((PyObject*) $o, $a, $v)"
 		end
 
 	c_py_object_generic_set_attribute (o, a, v: POINTER): INTEGER
@@ -1923,9 +1924,9 @@ feature {NONE} -- Externals (Object Protocol)
 			-- It looks for a data descriptor in the dictionary of classes in the object’s MRO, and if found it takes preference over setting or deleting the attribute in the instance dictionary.
 			-- Otherwise, the attribute is set or deleted in the object’s __dict__ (if present). On success, 0 is returned, otherwise an AttributeError is raised and -1 is returned.
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyObject_GenericSetAttr"
+			"PyObject_GenericSetAttr((PyObject*) $o, $a, $v)"
 		end
 
 	c_py_object_generic_get_dictionary (o, context: POINTER): POINTER
@@ -1934,16 +1935,16 @@ feature {NONE} -- Externals (Object Protocol)
 		external
 			"C inline use <Python.h>"
 		alias
-			"return PyObject_GenericGetDict((PyObject *)$o, (void *)$context)"
+			"PyObject_GenericGetDict((PyObject *)$o, (void *)$context)"
 		end
 
-	c_py_object_generic_set_dictionary (o, v, c: POINTER): POINTER
+	c_py_object_generic_set_dictionary (o, v, c: POINTER): INTEGER
 			-- A generic implementation for the setter of a __dict__ descriptor.
 			-- This implementation does not allow the dictionary to be deleted.
 		external
 			"C inline use <Python.h>"
 		alias
-			"return PyObject_GenericSetDict((PyObject *)$o, (PyObject *)$v, (void *)$c)"
+			"PyObject_GenericSetDict((PyObject *)$o, (PyObject *)$v, (void *)$c)"
 		end
 
 	c_py_object_del_attribute_string (o, a: POINTER): INTEGER
@@ -1951,9 +1952,9 @@ feature {NONE} -- Externals (Object Protocol)
 			-- Returns -1 on failure.
 			-- This is the equivalent of the Python statement: "del o.a".
 		external
-			"C [macro %"Python.h%"] (PyObject*, char*): EIF_INTEGER"
+			"C inline use <Python.h>"
 		alias
-			"PyObject_DelAttrString"
+			"PyObject_DelAttrString((PyObject*) $o, (char*) $a)"
 		end
 
 	c_py_object_has_attribute (o, a: POINTER): INTEGER
@@ -1961,9 +1962,9 @@ feature {NONE} -- Externals (Object Protocol)
 			-- This is equivalent to the Python expression "hasattr(o, a)".
 			-- This function always succeeds.
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyObject_HasAttr"
+			"PyObject_HasAttr((PyObject*) $o, (PyObject*) $a)"
 		end
 
 	c_py_object_get_attribute (o, a: POINTER): POINTER
@@ -1971,9 +1972,9 @@ feature {NONE} -- Externals (Object Protocol)
 			-- Returns the attribute value on success, or NULL on failure.
 			-- This is the equivalent of the Python expression "o.attr_name".
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyObject_GetAttr"
+			"PyObject_GetAttr((PyObject*) $o, $a)"
 		end
 
 	c_py_object_set_attribute (o, a, v: POINTER): INTEGER
@@ -1982,9 +1983,9 @@ feature {NONE} -- Externals (Object Protocol)
 			-- This is the equivalent of the Python statement "o.a = v".
 
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyObject_SetAttr"
+			"PyObject_SetAttr((PyObject*) $o, $a, $v)"
 		end
 
 	c_py_object_del_attribute (o, a: POINTER): INTEGER
@@ -1992,9 +1993,9 @@ feature {NONE} -- Externals (Object Protocol)
 			-- Returns -1 on failure.
 			-- This is the equivalent of the Python statement: "del o.a".
 		external
-			"C [macro %"Python.h%"] (PyObject*, PyObject*): EIF_INTEGER"
+			"C inline use <Python.h>"
 		alias
-			"PyObject_DelAttr"
+			"PyObject_DelAttr((PyObject*) $o, (PyObject*) $a)"
 		end
 
 	c_py_object_generic_get_attribute (o, a: POINTER): POINTER
@@ -2004,9 +2005,9 @@ feature {NONE} -- Externals (Object Protocol)
 			-- As outlined in Implementing Descriptors, data descriptors take preference over instance attributes, while non-data descriptors don’t.
 			--  Otherwise, an AttributeError is raised.
 		external
-			"C [macro %"Python.h%"] (PyObject*, PyObject*): EIF_POINTER"
+			"C inline use <Python.h>"
 		alias
-			"PyObject_GenericGetAttr"
+			"PyObject_GenericGetAttr((PyObject*) $o, (PyObject*) $a)"
 		end
 
 	c_py_object_compare_cmp (o1, o2: POINTER): INTEGER
@@ -2026,18 +2027,18 @@ feature {NONE} -- Externals (Object Protocol)
 			-- which must be one of Py_LT, Py_LE, Py_EQ, Py_NE, Py_GT, or Py_GE, corresponding to <, <=, ==, !=, >, or >= respectively.
 			-- This is the equivalent of the Python expression `o1 op o2`, where op is the operator corresponding to opid. Returns the value of the comparison on success, or NULL on failure.
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyObject_RichCompare"
+			"PyObject_RichCompare((PyObject*) $o1, (PyObject*) $o2, $opid)"
 		end
 
 	c_py_object_compare, c_py_object_rich_compare_bool (o1, o2: POINTER; opid: INTEGER): INTEGER
 			-- Compare the values of o1 and o2 using the operation specified by opid, which must be one of Py_LT, Py_LE, Py_EQ, Py_NE, Py_GT, or Py_GE, corresponding to <, <=, ==, !=, >, or >= respectively.
 			-- Returns -1 on error, 0 if the result is false, 1 otherwise. This is the equivalent of the Python expression o1 op o2, where op is the operator corresponding to opid.
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyObject_RichCompareBool"
+			"PyObject_RichCompareBool((PyObject*) $o1, (PyObject*) $o2, $opid)"
 		end
 
 	c_py_object_repr (o: POINTER): POINTER
@@ -2048,9 +2049,9 @@ feature {NONE} -- Externals (Object Protocol)
 			-- Called by the repr() built-in function and by reverse quotes.
 			-- Changed in version 3.4: This function now includes a debug assertion to help ensure that it does not silently discard an active exception.
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyObject_Repr"
+			"PyObject_Repr((PyObject*) $o)"
 		end
 
 	c_py_object_ascii (o: POINTER): POINTER
@@ -2058,9 +2059,9 @@ feature {NONE} -- Externals (Object Protocol)
 			--As PyObject_Repr(), compute a string representation of object o, but escape the non-ASCII characters in the string returned by PyObject_Repr() with \x, \u or \U escapes.
 			-- This generates a string similar to that returned by PyObject_Repr() in Python 2. Called by the ascii() built-in function.
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyObject_ASCII"
+			"PyObject_ASCII((PyObject*) $o)"
 		end
 
 	c_py_object_str (o: POINTER): POINTER
@@ -2070,9 +2071,9 @@ feature {NONE} -- Externals (Object Protocol)
 			-- This is the equivalent of the Python expression "str(o)".
 			-- Called by the str() built-in function and by the print statement.
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyObject_Str"
+			"PyObject_Str((PyObject*) $o)"
 		end
 
 	c_py_object_bytes (o: POINTER): POINTER
@@ -2082,9 +2083,9 @@ feature {NONE} -- Externals (Object Protocol)
 			-- This is equivalent to the Python expression bytes(o), when o is not an integer.
 			-- Unlike bytes(o), a TypeError is raised when o is an integer instead of a zero-initialized bytes object.
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyObject_Bytes"
+			"PyObject_Bytes((PyObject*) $o)"
 		end
 
 	c_py_object_is_subclass (o, c: POINTER): INTEGER
@@ -2094,9 +2095,9 @@ feature {NONE} -- Externals (Object Protocol)
 			-- If `c` has a __subclasscheck__() method, it will be called to determine the subclass status as described in PEP 3119. Otherwise, derived is a subclass of `c` if it is a direct or indirect subclass, i.e. contained in a.__mro__.
 			-- Normally only class objects, i.e. instances of type or a derived class, are considered classes. However, objects can override this by having a __bases__ attribute (which must be a tuple of base classes).
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyObject_IsSubclass"
+			"PyObject_IsSubclass((PyObject*) $o, (PyObject*) $c)"
 		end
 
 	c_py_object_is_instance (o, c: POINTER): INTEGER
@@ -2106,12 +2107,10 @@ feature {NONE} -- Externals (Object Protocol)
 			-- An instance `o` can override what is considered its class by having a __class__ attribute.
 			--  An object `c` can override if it is considered a class, and what its base classes are, by having a __bases__ attribute (which must be a tuple of base classes).
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyObject_IsInstance"
+			"PyObject_IsInstance((PyObject*) $o, (PyObject*) $c)"
 		end
-
-
 
 	c_py_object_call (o, a, k: POINTER): POINTER
 			-- Return value: New reference.
@@ -2120,9 +2119,9 @@ feature {NONE} -- Externals (Object Protocol)
 			-- Return the result of the call on success, or raise an exception and return NULL on failure.
 			-- This is the equivalent of the Python expression: callable(*args, **kwargs).
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyObject_Call"
+			"PyObject_Call((PyObject*) $o, (PyObject*) $a, (PyObject*) $k)"
 		end
 
 	c_py_object_call_object (o, a: POINTER): POINTER
@@ -2132,9 +2131,9 @@ feature {NONE} -- Externals (Object Protocol)
 			-- Returns the result of the call on success, or NULL on failure.
 			-- This is the equivalent of the Python expression "apply(o, a)" or "o(*a)".
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyObject_CallObject"
+			"PyObject_CallObject((PyObject*) $o, (PyObject*) $a)"
 		end
 
 	c_py_object_call_function (o, f, a: POINTER): POINTER
@@ -2145,9 +2144,9 @@ feature {NONE} -- Externals (Object Protocol)
 			-- Returns the result of the call on success, or NULL on failure.
 			-- This is the equivalent of the Python expression "apply(callable, args)" or "callable(*args)".
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyObject_CallFunction"
+			"PyObject_CallFunction((PyObject*) $o, $f, $a)"
 		end
 
 	c_py_object_call_method (o, m, f, a: POINTER): POINTER
@@ -2158,9 +2157,9 @@ feature {NONE} -- Externals (Object Protocol)
 			-- Returns the result of the call on success, or NULL on failure.
 			-- This is the equivalent of the Python expression "o.method(a)".
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyObject_CallMethod"
+			"PyObject_CallMethod((PyObject*) $o, $m, $f, $a)"
 		end
 
 	c_py_object_hash (o: POINTER): INTEGER
@@ -2168,18 +2167,18 @@ feature {NONE} -- Externals (Object Protocol)
 			-- On failure, return -1.
 			-- This is the equivalent of the Python expression "hash(o)".
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyObject_Hash"
+			"PyObject_Hash((PyObject*) $o)"
 		end
 
 	c_py_object_hash_not_implemented (o: POINTER): INTEGER
 			-- Set a TypeError indicating that type(o) is not hashable and return -1.
 			-- This function receives special treatment when stored in a tp_hash slot, allowing a type to explicitly indicate to the interpreter that it is not hashable.
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyObject_Hash"
+			"PyObject_Hash((PyObject*) $o)"
 		end
 
 	c_py_object_is_true (o: POINTER): INTEGER
@@ -2187,18 +2186,18 @@ feature {NONE} -- Externals (Object Protocol)
 			-- This is equivalent to the Python expression "not not o".
 			-- This function always succeeds.
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyObject_IsTrue"
+			"PyObject_IsTrue((PyObject*) $o)"
 		end
 
 	c_py_object_not (o: POINTER): INTEGER
 			-- Returns 0 if the object o is considered to be true, and 1 otherwise.
 			-- This is equivalent to the Python expression not o. On failure, return -1.
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyObject_Not"
+			"PyObject_Not((PyObject*) $o)"
 		end
 
 	c_py_object_length (o: POINTER): INTEGER
@@ -2208,9 +2207,9 @@ feature {NONE} -- Externals (Object Protocol)
 			-- On error, -1 is returned.
 			-- This is the equivalent to the Python expression "len(o)".
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyObject_Length"
+			"PyObject_Length((PyObject*) $o)"
 		end
 
 	c_py_object_size (o: POINTER): INTEGER
@@ -2219,9 +2218,9 @@ feature {NONE} -- Externals (Object Protocol)
 			--On error, -1 is returned.
 			-- This is the equivalent to the Python expression len(o).
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyObject_Size"
+			"PyObject_Size((PyObject*) $o)"
 		end
 
 	c_py_object_length_hint (o: POINTER; a_default: INTEGER): INTEGER
@@ -2233,7 +2232,7 @@ feature {NONE} -- Externals (Object Protocol)
 		external
 			"C inline use <Python.h>"
 		alias
-			"return PyObject_LengthHint((PyObject *)$o, (Py_ssize_t)$a_default)"
+			"PyObject_LengthHint((PyObject *)$o, (Py_ssize_t)$a_default)"
 		end
 
 	c_py_object_get_item (o, k: POINTER): POINTER
@@ -2241,9 +2240,9 @@ feature {NONE} -- Externals (Object Protocol)
 			-- Return element of `o' corresponding to the object `k'  or NULL on failure.
 			-- This is the equivalent of the Python expression "o[k]".
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyObject_GetItem"
+			"PyObject_GetItem((PyObject*) $o, $k)"
 		end
 
 	c_py_object_set_item (o, k, v: POINTER): INTEGER
@@ -2252,9 +2251,9 @@ feature {NONE} -- Externals (Object Protocol)
 			-- This is the equivalent of the Python statement "o[k] = v".
 
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyObject_SetItem"
+			"PyObject_SetItem((PyObject*) $o, $k, $v)"
 		end
 
 	c_py_object_del_item (o, k: POINTER): INTEGER
@@ -2262,9 +2261,9 @@ feature {NONE} -- Externals (Object Protocol)
 			-- Returns -1 on failure.
 			-- This is the equivalent of the Python statement "del o[k]".
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyObject_DelItem"
+			"PyObject_DelItem((PyObject*) $o, $k)"
 		end
 
 	c_py_object_as_file_descriptor (o: POINTER): INTEGER
@@ -2275,9 +2274,9 @@ feature {NONE} -- Externals (Object Protocol)
 			-- which is returned as the file descriptor value.
 			-- Returns -1 on failure.
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyObject_AsFileDescriptor"
+			"PyObject_AsFileDescriptor((PyObject*) $o)"
 		end
 
 	c_py_object_dir (o: POINTER)
@@ -2289,9 +2288,9 @@ feature {NONE} -- Externals (Object Protocol)
 			-- returning the names of the current locals; in this case,
 			-- if no execution frame is active then NULL is returned but PyErr_Occurred() will return false.
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyObject_Dir"
+			"PyObject_Dir((PyObject*) $o)"
 		end
 
 	c_py_object_get_iter (o: POINTER): POINTER
@@ -2300,9 +2299,9 @@ feature {NONE} -- Externals (Object Protocol)
 			-- or the object itself if the object is already an iterator.
 			-- Raises TypeError and returns NULL if the object cannot be iterated.
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyObject_GetIter"
+			"PyObject_GetIter((PyObject*) $o)"
 		end
 
 	c_py_callable_check (o: POINTER): INTEGER
@@ -2310,9 +2309,9 @@ feature {NONE} -- Externals (Object Protocol)
 			-- Return 1 if the object is callable and 0 otherwise.
 			-- This function always succeeds.
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyCallable_Check"
+			"PyCallable_Check((PyObject*) $o)"
 		end
 
 feature {NONE} -- Externals (Sequence protocol)
@@ -2321,18 +2320,18 @@ feature {NONE} -- Externals (Sequence protocol)
 			-- Return 1 if the object provides sequence protocol, and 0 otherwise.
 			-- This function always succeeds.
 		external
-			"C [macro %"Python.h%"](PyObject *): int"
+			"C inline use <Python.h>"
 		alias
-			"PySequence_Check"
+			"PySequence_Check((PyObject*) $o)"
 		end
 
 	c_py_sequence_size (o: POINTER): INTEGER
 			-- Returns the number of objects in sequence o on success, and -1 on failure.
 			-- For objects that do not provide sequence protocol, this is equivalent to the Python expression "len(o)".
 		external
-			"C [macro %"Python.h%"](PyObject *): int"
+			"C inline use <Python.h>"
 		alias
-			"PySequence_Size"
+			"PySequence_Size((PyObject*) $o)"
 		end
 
 --	c_py_sequence_contains (o, value: POINTER): INTEGER
@@ -2340,9 +2339,9 @@ feature {NONE} -- Externals (Sequence protocol)
 --			-- If an item in `o' is equal to `value', return 1, otherwise return 0.
 --			-- On error, return -1. This is equivalent to the Python expression "value in o".
 --		external
---			"C [macro %"Python.h%"](PyObject*,PyTypeObject*):EIF_INTEGER"
+--			"C inline use <Python.h>"
 --		alias
---			"PySequence_Contains"
+--			"PySequence_Contains((PyObject*) $o, (PyTypeObject*) $value)"
 --		end
 
 	c_py_sequence_get_item (o: POINTER; pos: INTEGER): POINTER
@@ -2351,9 +2350,9 @@ feature {NONE} -- Externals (Sequence protocol)
 			-- This is the equivalent of the Python expression "o[pos]".
 			-- If `pos' is out of bounds, returns NULL and sets an IndexError exception.
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PySequence_GetItem"
+			"PySequence_GetItem((PyObject*) $o, $pos)"
 		end
 
 	c_py_sequence_set_item (o: POINTER; pos: INTEGER; v: POINTER): INTEGER
@@ -2362,9 +2361,9 @@ feature {NONE} -- Externals (Sequence protocol)
 			-- This is the equivalent of the Python statement "o[i] = v".
 			-- This function does not  steal a reference to v.
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PySequence_SetItem"
+			"PySequence_SetItem((PyObject*) $o, $pos, $v)"
 		end
 
 feature {NONE} -- Externals (String Objects)
@@ -2373,7 +2372,7 @@ feature {NONE} -- Externals (String Objects)
 		--			--  This instance of PyTypeObject represents the Python string type;
 		--			-- it is the same object as types.TypeType in the Python layer.
 		--		external
-		--			"C [macro %"Python.h%"]"
+		--			"C inline use <Python.h>"
 		--		alias
 		--			"&PyString_Type"
 		--		end
@@ -2384,9 +2383,9 @@ feature {NONE} -- Externals (String Objects)
 		--			-- and NULL on failure. The parameter `s' must not be NULL;
 		--			-- it will not be checked.
 		--		external
-		--			"C | %"Python.h%""
+		--			"C inline use <Python.h>"
 		--		alias
-		--			"PyString_FromString"
+		--			"PyString_FromString($s)"
 		--		end
 
 		--	c_py_string_check (o: POINTER): INTEGER
@@ -2394,18 +2393,18 @@ feature {NONE} -- Externals (String Objects)
 		--			-- an instance of a subtype of the string type.
 		--			-- Changed in version 2.2: Allowed subtypes to be accepted.
 		--		external
-		--			"C [macro %"Python.h%"] (PyObject *): int"
+		--			"C inline use <Python.h>"
 		--		alias
-		--			"PyString_Check"
+		--			"PyString_Check((PyObject*) $o)"
 		--		end
 
 		--	c_py_string_check_exact (o: POINTER): INTEGER
 		--			-- Returns true if the object `o' is a string object,
 		--			-- but not an instance of a subtype of the string type. New in version 2.2.
 		--		external
-		--			"C [macro %"Python.h%"](PyObject *): int"
+		--			"C inline use <Python.h>"
 		--		alias
-		--			"PyString_CheckExact"
+		--			"PyString_CheckExact((PyObject*) $o)"
 		--		end
 
 		--	c_py_string_from_string_and_size (s: POINTER; len: INTEGER): POINTER
@@ -2413,17 +2412,17 @@ feature {NONE} -- Externals (String Objects)
 		--			-- Returns a new string object with the value `s' and length len on success,
 		--			-- and NULL on failure. If `o' is NULL, the contents of the string are uninitialized.
 		--		external
-		--			"C | %"Python.h%""
+		--			"C inline use <Python.h>"
 		--		alias
-		--			"PyString_FromStringAndSize"
+		--			"PyString_FromStringAndSize($s, $len)"
 		--		end
 
 		--	c_py_string_size (o: POINTER): INTEGER
 		--			-- Returns the length of the string in string object string.
 		--		external
-		--			"C | %"Python.h%""
+		--			"C inline use <Python.h>"
 		--		alias
-		--			"PyString_Size"
+		--			"PyString_Size((PyObject*) $o)"
 		--		end
 
 		--	c_py_string_as_string (s: POINTER): POINTER
@@ -2435,9 +2434,9 @@ feature {NONE} -- Externals (String Objects)
 		--			-- If string is a Unicode object, this function computes the default encoding of string and operates on that.
 		--			-- If string is not a string object at all, PyString_AsString() returns NULL and raises TypeError.
 		--		external
-		--			"C | %"Python.h%""
+		--			"C inline use <Python.h>"
 		--		alias
-		--			"PyString_AsString"
+		--			"PyString_AsString($s)"
 		--		end
 
 		--	c_py_string_format (f: POINTER; args: INTEGER): POINTER
@@ -2446,9 +2445,9 @@ feature {NONE} -- Externals (String Objects)
 		--			-- Analogous to format % `args'.
 		--			-- The `args' argument must be a tuple.
 		--		external
-		--			"C | %"Python.h%""
+		--			"C inline use <Python.h>"
 		--		alias
-		--			"PyString_Format"
+		--			"PyString_Format($f, $args)"
 		--		end
 
 		--	c_py_string_decode (s: POINTER; size: INTEGER; encoding, errors: POINTER): POINTER
@@ -2459,9 +2458,9 @@ feature {NONE} -- Externals (String Objects)
 		--			-- The codec to be used is looked up using the Python codec registry.
 		--			-- Returns NULL if an exception was raised by the codec.
 		--		external
-		--			"C | %"Python.h%""
+		--			"C inline use <Python.h>"
 		--		alias
-		--			"PyString_Decode"
+		--			"PyString_Decode($s, $size, $encoding, $errors)"
 		--		end
 
 		--	c_py_string_encode (s: POINTER; size: INTEGER; encoding, errors: POINTER): POINTER
@@ -2472,9 +2471,9 @@ feature {NONE} -- Externals (String Objects)
 		--			-- The codec to be used is looked up using the Python codec registry.
 		--			-- Returns NULL if an exception was raised by the codec.
 		--		external
-		--			"C | %"Python.h%""
+		--			"C inline use <Python.h>"
 		--		alias
-		--			"PyString_Encode"
+		--			"PyString_Encode($s, $size, $encoding, $errors)"
 		--		end
 
 feature {NONE} -- Externals (Tuple Objects)
@@ -2483,7 +2482,7 @@ feature {NONE} -- Externals (Tuple Objects)
 			-- This instance of PyTypeObject represents the Python tuple type;
 			-- it is the same object as types.TupleType in the Python layer.
 		external
-			"C [macro %"Python.h%"]"
+			"C inline use <Python.h>"
 		alias
 			"&PyTuple_Type"
 		end
@@ -2492,27 +2491,27 @@ feature {NONE} -- Externals (Tuple Objects)
 			-- Return true if p is a tuple object or an instance of a subtype of the tuple type.
 			-- Changed in version 2.2: Allowed subtypes to be accepted.
 		external
-			"C [macro %"Python.h%"](PyObject *): int"
+			"C inline use <Python.h>"
 		alias
-			"PyTuple_Check"
+			"PyTuple_Check((PyObject*) $o)"
 		end
 
 	c_py_tuple_new (l: INTEGER): POINTER
 			-- Return value: New reference.
 			-- Returns a new tuple of size `l' on success, or NULL on failure.
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyTuple_New"
+			"PyTuple_New($l)"
 		end
 
 	c_py_tuple_size (o: POINTER): INTEGER
 			-- Returns the length of the tuple object in `o';
 			-- this is equivalent to "len(o)" on a tuple object.
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyTuple_Size"
+			"PyTuple_Size((PyObject*) $o)"
 		end
 
 	c_py_tuple_get_item (o: POINTER; pos: INTEGER): POINTER
@@ -2520,18 +2519,18 @@ feature {NONE} -- Externals (Tuple Objects)
 			-- Returns the object at position pos in the tuple pointed to by o.
 			-- If pos is out of bounds, returns NULL and sets an IndexError exception.
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyTuple_GetItem"
+			"PyTuple_GetItem((PyObject*) $o, $pos)"
 		end
 
 	c_py_tuple_set_item (o: POINTER; pos: INTEGER; v: POINTER): INTEGER
 			-- Inserts a reference to object v at position pos of the tuple pointed to by o.
 			-- It returns 0 on success. Note: This function ``steals'' a reference to v.
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyTuple_SetItem"
+			"PyTuple_SetItem((PyObject*) $o, $pos, $v)"
 		end
 
 feature {NONE} -- Externals (Type Objects)
@@ -2540,7 +2539,7 @@ feature {NONE} -- Externals (Type Objects)
 			-- This is the type object for type objects;
 			-- it is the same object as types.TypeType in the Python layer.
 		external
-			"C [macro %"Python.h%"]"
+			"C inline use <Python.h>"
 		alias
 			"&PyType_Type"
 		end
@@ -2548,27 +2547,27 @@ feature {NONE} -- Externals (Type Objects)
 	c_py_type_is_subtype (a, b: POINTER): INTEGER
 			-- Return true if a is a subtype of b. New in version 2.2.
 		external
-			"C | %"Python.h%""
+			"C inline use <Python.h>"
 		alias
-			"PyType_IsSubtype"
+			"PyType_IsSubtype($a, $b)"
 		end
 
 	c_py_type_check (o: POINTER): INTEGER
 			-- Return non-zero if the object o is a type object, including instances of types derived from the standard type object.
 			-- Return 0 in all other cases.
 		external
-			"C [macro %"Python.h%"] (PyObject *): int"
+			"C inline use <Python.h>"
 		alias
-			"PyType_Check"
+			"PyType_Check((PyObject*) $o)"
 		end
 
 	c_py_type_checkexact (o: POINTER): INTEGER
 			-- Return non-zero if the object o is a type object, but not a subtype of the standard type object.
 			-- Return 0 in all other cases.
 		external
-			"C [macro %"Python.h%"] (PyObject *): int"
+			"C inline use <Python.h>"
 		alias
-			"PyType_CheckExact"
+			"PyType_CheckExact((PyObject*) $o)"
 		end
 
 feature {NONE} -- Externals (	 Objects)
@@ -2576,7 +2575,7 @@ feature {NONE} -- Externals (	 Objects)
 	c_py_unicode_type: POINTER
 			--
 		external
-			"C [macro %"Python.h%"]"
+			"C inline use <Python.h>"
 		alias
 			"&PyUnicode_Type"
 		end

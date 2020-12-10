@@ -14,16 +14,19 @@ inherit
 		select
 			is_equal
 		end
+
 	HASHABLE
 		rename
 			is_equal as is_equal_hash
 		end
+
 	MEMORY
 		rename
 			is_equal as mem_is_equal
 		redefine
 			dispose
 		end
+
 	PYTHON_API
 		rename
 			is_equal as is_equal_api
@@ -327,7 +330,7 @@ feature {NONE} -- Implementation
 	dispose
 			-- <Precursor>
 		do
-			if c_py_refcnt (py_obj_ptr) > 1 then
+			if not py_obj_ptr.is_default_pointer and then c_py_refcnt (py_obj_ptr) > 1 then
 				c_py_xdecref (py_obj_ptr)
 				py_obj_ptr := c_py_none
 			end
