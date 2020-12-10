@@ -52,7 +52,7 @@ feature -- Initialization
 		do
 			create mp.make
 			r := mp.plot ({ARRAY [ANY]} << {ARRAY [ANY]}<<1, 2, 3, 4>>, {ARRAY [ANY]}<<1, 4, 9, 16>>, "ro">>, create {STRING_TABLE [ANY]}.make (0))
-			r := mp.axis( << <<0, 6, 0, 20>> >>, create {STRING_TABLE [ANY]}.make (0) )
+			r := mp.axis({ARRAY [ANY]} << <<0, 6, 0, 20>> >>, create {STRING_TABLE [ANY]}.make (0) )
 			r := mp.show ({ARRAY [ANY]} <<>>)
 		end
 
